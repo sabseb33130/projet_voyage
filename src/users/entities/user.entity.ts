@@ -1,9 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { Album } from 'src/albums/entities/album.entity';
+import { Friend } from 'src/friends/entities/friend.entity';
+import { Photo } from 'src/photos/entities/photo.entity';
 import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
@@ -63,4 +70,13 @@ export class User extends BaseEntity {
   @ApiProperty()
   @Column({ type: 'varchar' })
   pays: string;
+  @OneToMany(() => Friend, (friend) => friend.user)
+  @JoinColumn()
+  friend: Friend[];
+  @ManyToMany(() => Album)
+  @JoinTable()
+  album: Album[];
+  @OneToMany(() => Photo, (photo) => photo.user)
+  @JoinColumn()
+  photo: Photo[];
 }

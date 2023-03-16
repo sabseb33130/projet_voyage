@@ -33,7 +33,6 @@ export class CreateUserDto {
   adresse_line1: string;
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
   adresse_line2: string;
 
   @ApiProperty()

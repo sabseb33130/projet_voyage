@@ -25,7 +25,7 @@ export class UsersService {
   }
 
   async findAll() {
-    const users = await User.find({});
+    const users = await User.find();
     return users;
   }
 
@@ -40,7 +40,7 @@ export class UsersService {
   }
 
   async findOneUser(pseudo: string) {
-    const user = await User.find({});
+    const user = await User.findOneBy({ pseudo: pseudo });
     console.log(user);
 
     return user;

@@ -56,9 +56,4 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsOptional()
   @IsString()
   pays: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsBoolean()
-  admin: boolean;
 }
