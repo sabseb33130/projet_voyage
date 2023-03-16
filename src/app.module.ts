@@ -11,6 +11,7 @@ import { Album } from './albums/entities/album.entity';
 import { Friend } from './friends/entities/friend.entity';
 import { Photo } from './photos/entities/photo.entity';
 import { User } from './users/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { User } from './users/entities/user.entity';
     FriendsModule,
     PhotosModule,
     AlbumsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

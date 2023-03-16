@@ -44,16 +44,11 @@ export class User extends BaseEntity {
   password: string;
 
   @ApiProperty()
-  @Exclude()
-  @Column({ type: 'varchar' })
-  verifPassword: string;
-
-  @ApiProperty()
   @Column({ type: 'varchar' })
   adresse_line1: string;
 
   @ApiProperty()
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   adresse_line2: string;
 
   @ApiProperty()
