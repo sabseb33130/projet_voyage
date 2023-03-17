@@ -5,7 +5,10 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  async create(createUserDto: CreateUserDto, hash: string) {
+  async create(
+    createUserDto: CreateUserDto,
+    hash: string,
+  ): Promise<User | undefined> {
     const newUser = new User();
     newUser.prenom = createUserDto.prenom;
     newUser.nom = createUserDto.nom;
@@ -24,12 +27,12 @@ export class UsersService {
     return newUser;
   }
 
-  async findAll() {
+  async findAll(): Promise<User[]> {
     const users = await User.find();
     return users;
   }
 
-  async findOneByPseudo(pseudo: string) {
+  async findOneByPseudo(pseudo: string): Promise<User | undefined> {
     const user = await User.findOne({ where: { pseudo: pseudo } });
 
     if (user) {
@@ -39,20 +42,20 @@ export class UsersService {
     return undefined;
   }
 
-  async findOneUser(pseudo: string) {
+  async findOneUser(pseudo: string): Promise<User | undefined> {
     const user = await User.findOneBy({ pseudo: pseudo });
     console.log(user);
 
     return user;
   }
 
-  async findOneByEmail(email: string) {
+  async findOneByEmail(email: string): Promise<User | undefined> {
     const userMail = await User.findOne({ where: { email: email } });
 
     return userMail;
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: number): Promise<User | undefined> {
     const user = await User.findOneBy({ id });
 
     if (user) {
@@ -62,7 +65,10 @@ export class UsersService {
     return undefined;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<User | undefined> {
     await User.update(id, updateUserDto);
 
     const newUser = await User.findOneBy({
@@ -72,7 +78,7 @@ export class UsersService {
     return newUser;
   }
 
-  async delete(id: number) {
+  async delete(id: number): Promise<User | undefined> {
     const deleteUser = await User.findOneBy({ id: id });
     User.remove(deleteUser);
     return deleteUser;
