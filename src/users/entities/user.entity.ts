@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+
 import { Album } from 'src/albums/entities/album.entity';
 import { Friend } from 'src/friends/entities/friend.entity';
 import { Photo } from 'src/photos/entities/photo.entity';
@@ -65,12 +66,12 @@ export class User extends BaseEntity {
   @ApiProperty()
   @Column({ type: 'varchar' })
   pays: string;
-  @OneToMany(() => Friend, (friend) => friend.user)
-  @JoinColumn()
-  friend: Friend[];
-  @ManyToMany(() => Album)
+  @ManyToMany(() => Friend)
   @JoinTable()
-  album: Album[];
+  friend: Friend[];
+  @OneToMany(() => Album, (album) => album.id)
+  @JoinTable()
+  album: number;
   @OneToMany(() => Photo, (photo) => photo.user)
   @JoinColumn()
   photo: Photo[];

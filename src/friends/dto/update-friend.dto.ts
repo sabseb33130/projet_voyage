@@ -5,9 +5,6 @@ import { CreateFriendDto } from './create-friend.dto';
 export class UpdateFriendDto extends PartialType(CreateFriendDto) {
   @ApiProperty()
   @IsOptional()
-  invitation?: string;
-  @ApiProperty()
-  @IsOptional()
   invitation_ok?: string;
   @ApiProperty()
   @IsOptional()

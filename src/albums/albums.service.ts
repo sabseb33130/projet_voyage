@@ -13,7 +13,7 @@ export class AlbumsService {
     return newAlbum;
   }
 
-  async findAll() {
+  async findAll(): Promise<Album[] | undefined> {
     const allAlbums = await Album.find();
     return allAlbums;
   }
@@ -25,7 +25,7 @@ export class AlbumsService {
     return undefined;
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Album | undefined> {
     const oneAlbum = await Album.findOneBy({ id });
     if (oneAlbum) {
       return oneAlbum;

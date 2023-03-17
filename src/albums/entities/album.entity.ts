@@ -4,8 +4,10 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -17,9 +19,9 @@ export class Album extends BaseEntity {
   @Column({ type: 'varchar' })
   nom_album: string;
 
-  @ManyToMany(() => User)
-  @JoinTable()
-  user: User[];
+  @OneToMany(() => User, (user) => user.id)
+  @JoinColumn()
+  user: number;
 
   @ManyToMany(() => Photo)
   @JoinTable()

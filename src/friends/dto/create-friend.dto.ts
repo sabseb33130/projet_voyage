@@ -7,10 +7,8 @@ export class CreateFriendDto {
   invitation: string;
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
   invitation_ok: string;
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
   role: number;
 }

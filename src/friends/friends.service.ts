@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFriendDto } from './dto/create-friend.dto';
 import { UpdateFriendDto } from './dto/update-friend.dto';
+import { Friend } from './entities/friend.entity';
 
 @Injectable()
 export class FriendsService {
-  create(createFriendDto: CreateFriendDto) {
-    return 'This action adds a new friend';
+  create(createFriendDto: CreateFriendDto): Promise<Friend | undefined> {
+    const addFriend = new Friend();
+    addFriend.invitation = createFriendDto.invitation;
+    const newFriend = addFriend.save();
+    return newFriend;
   }
 
-  findAll() {
-    return `This action returns all friends`;
+  async findAll(): Promise<Friend[] | undefined> {
+    const allFriend = await Friend.find();
+    return allFriend;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} friend`;
+  async findOne(id: number): Promise<Friend | undefined> {
+    const oneFriend = await Friend.findOneBy({ id });
+    return oneFriend;
+  }
+  async findOneInvit(invitation: string): Promise<Friend | undefined> {
+    const oneFriend = await Friend.findOneBy({ invitation });
+    return oneFriend;
   }
 
-  update(id: number, updateFriendDto: UpdateFriendDto) {
-    return `This action updates a #${id} friend`;
+  async update(
+    id: number,
+    updateFriendDto: UpdateFriendDto,
+  ): Promise<Friend | undefined> {
+    await Friend.update(id, updateFriendDto);
+    const upFriend = await Friend.findOneBy({ id });
+    return upFriend;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} friend`;
+  async remove(id: number): Promise<Friend[] | undefined> {
+    const delFriend = await Friend.findBy({ id });
+    await Friend.remove(delFriend);
+    return delFriend;
   }
 }

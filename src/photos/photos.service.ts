@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
+import { Photo } from './entities/photo.entity';
 
 @Injectable()
 export class PhotosService {
-  create(createPhotoDto: CreatePhotoDto) {
-    return 'This action adds a new photo';
+  async create(createPhotoDto: CreatePhotoDto): Promise<Photo | undefined> {
+    const newPhoto = new Photo();
+    newPhoto.nom_photo = createPhotoDto.nom_photo;
+    await newPhoto.save();
+    return newPhoto;
   }
 
-  findAll() {
-    return `This action returns all photos`;
+  async findAll(): Promise<Photo[] | undefined> {
+    const allPhoto = await Photo.find();
+    return allPhoto;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} photo`;
+  async findOne(id: number): Promise<Photo | undefined> {
+    const onePhoto = await Photo.findOneBy({ id });
+    return onePhoto;
+  }
+  async findOneNom(nom_photo): Promise<Photo | undefined> {
+    const nomPhoto = await Photo.findOneBy({ nom_photo });
+    return nomPhoto;
   }
 
-  update(id: number, updatePhotoDto: UpdatePhotoDto) {
-    return `This action updates a #${id} photo`;
+  async update(
+    id: number,
+    updatePhotoDto: UpdatePhotoDto,
+  ): Promise<Photo | undefined> {
+    await Photo.update(id, updatePhotoDto);
+    const upPhoto = await Photo.findOneBy({ id });
+    return upPhoto;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} photo`;
+  async remove(id: number): Promise<Photo[] | undefined> {
+    const delPhoto = await Photo.findBy({ id });
+    await Photo.remove(delPhoto);
+    return delPhoto;
   }
 }

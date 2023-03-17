@@ -4,6 +4,8 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -15,15 +17,13 @@ export class Friend extends BaseEntity {
   @Column({ type: 'varchar' })
   invitation: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', default: 'en attente' })
   invitation_ok: string;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'integer', default: 0 })
   Access_level: number;
-  @ApiProperty()
-  @ManyToOne(() => User, (user) => user.id, {
-    cascade: true,
-    onDelete: 'CASCADE',
-  })
-  user: number;
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  user: User[];
 }

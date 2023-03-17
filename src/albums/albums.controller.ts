@@ -64,10 +64,11 @@ export class AlbumsController {
     const verifAlbum = await this.albumsService.findOneNom(
       updateAlbumDto.nom_album,
     );
-    const upAlbum = this.albumsService.update(+id, updateAlbumDto);
+
     if (!verifAlbum) {
       throw new NotFoundException("Cette album n'existe pas");
     }
+    const upAlbum = this.albumsService.update(+id, updateAlbumDto);
     return {
       statusCode: 201,
       message: 'Modifications enregistrées.',
