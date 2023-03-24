@@ -66,13 +66,20 @@ export class User extends BaseEntity {
   @ApiProperty()
   @Column({ type: 'varchar' })
   pays: string;
-  @ManyToMany(() => Friend)
+
+  /* @ManyToMany(() => Friend)
   @JoinTable()
   friend: Friend[];
-  @OneToMany(() => Album, (album) => album.id)
-  @JoinTable()
-  album: number;
+
+  @OneToMany(() => Album, (album) => album.user)
+  album: Photo[];
+*/
   @OneToMany(() => Photo, (photo) => photo.user)
-  @JoinColumn()
-  photo: Photo[];
+  photos: Photo[];
+  @ManyToMany(() => Friend, { eager: true })
+  @JoinTable()
+  friend: Friend[];
+
+  @OneToMany(() => Album, (album) => album.user)
+  album: Album[];
 }

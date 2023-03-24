@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 var cors = require('cors');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  var cors = require('cors');
+  app.use(cors());
   app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .addBearerAuth()

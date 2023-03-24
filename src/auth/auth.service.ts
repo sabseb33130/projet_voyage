@@ -11,8 +11,10 @@ export class AuthService {
 
   async validateUser(username: string, password: string): Promise<any> {
     const user = await this.usersService.findOneUser(username);
-    if (user === undefined) {
-      throw new UnauthorizedException('Compte inexistant');
+    if (user === null) {
+      throw new UnauthorizedException(
+        'Compte inexistant ou votre mot de passe ou votre identifiant est incorrect !! ',
+      );
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
@@ -22,7 +24,9 @@ export class AuthService {
     return null;
   }
   async login(user: any) {
-    const payload = { username: user.pseudo, sub: user.userId };
+    const payload = { username: user.pseudo, sub: user.id };
+    console.log(payload);
+
     return {
       access_token: this.jwtService.sign(payload),
     };

@@ -17,10 +17,10 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 
 @ApiTags('albums')
-@Controller('albums')
+@Controller('api/albums')
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
-  @Post()
+  @Post('api/albums')
   async create(@Body() createAlbumDto: CreateAlbumDto) {
     const verifAlbum = await this.albumsService.findOneNom(
       createAlbumDto.nom_album,
@@ -37,7 +37,7 @@ export class AlbumsController {
     };
   }
 
-  @Get()
+  @Get('api/albums')
   async findAll() {
     const allAlbums = await this.albumsService.findAll();
     if (!allAlbums) {
@@ -47,7 +47,7 @@ export class AlbumsController {
     return allAlbums;
   }
 
-  @Get(':id')
+  @Get('api/albums/:id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const oneAlbum = await this.albumsService.findOne(+id);
     if (!oneAlbum) {
@@ -56,7 +56,7 @@ export class AlbumsController {
     return oneAlbum;
   }
   @ApiBody({ type: UpdateAlbumDto })
-  @Patch(':id')
+  @Patch('api/albums/:id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAlbumDto: UpdateAlbumDto,
@@ -76,7 +76,7 @@ export class AlbumsController {
     };
   }
 
-  @Delete(':id')
+  @Delete('api/albums/:id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     const oneAlbum = await Album.findOneBy({ id });
     if (!oneAlbum) {

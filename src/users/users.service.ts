@@ -33,7 +33,10 @@ export class UsersService {
   }
 
   async findOneByPseudo(pseudo: string): Promise<User | undefined> {
-    const user = await User.findOne({ where: { pseudo: pseudo } });
+    const user = await User.findOne({
+      relations: { photos: true, album: true },
+      where: { pseudo: pseudo },
+    });
 
     if (user) {
       return user;
@@ -50,7 +53,10 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string): Promise<User | undefined> {
-    const userMail = await User.findOne({ where: { email: email } });
+    const userMail = await User.findOne({
+      relations: { photos: true, album: true },
+      where: { email: email },
+    });
 
     return userMail;
   }

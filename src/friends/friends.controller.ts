@@ -13,7 +13,7 @@ import { CreateFriendDto } from './dto/create-friend.dto';
 import { UpdateFriendDto } from './dto/update-friend.dto';
 import { NotFoundException } from '@nestjs/common/exceptions';
 
-@Controller('friends')
+@Controller('api/friends')
 export class FriendsController {
   constructor(private readonly friendsService: FriendsService) {}
 
@@ -34,7 +34,7 @@ export class FriendsController {
     };
   }
 
-  @Get()
+  @Get('api/friends')
   async findAll() {
     const allFriend = await this.friendsService.findAll();
     if (allFriend === undefined) {
@@ -47,7 +47,7 @@ export class FriendsController {
     };
   }
 
-  @Get(':id')
+  @Get('api/friends/:id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const oneFriend = await this.friendsService.findOne(id);
     if (!oneFriend) {
@@ -60,7 +60,7 @@ export class FriendsController {
     };
   }
 
-  @Patch(':id')
+  @Patch('api/friends/:id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateFriendDto: UpdateFriendDto,
@@ -77,7 +77,7 @@ export class FriendsController {
     };
   }
 
-  @Delete(':id')
+  @Delete('api/friends/:id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     const delFriend = await this.friendsService.findOne(id);
     if (!delFriend) {

@@ -4,6 +4,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -21,9 +22,12 @@ export class Photo extends BaseEntity {
   lon: number;
   @Column({ type: 'date' })
   date_photo: Date;
+
   @ManyToMany(() => Album)
   @JoinTable()
   album: Album[];
-  @ManyToOne(() => User, (user) => user.id)
-  user: number;
+
+  @ManyToOne(() => User, (user) => user.photos, { eager: true })
+  @JoinColumn()
+  user: User;
 }

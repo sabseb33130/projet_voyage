@@ -15,11 +15,11 @@ import { BadRequestException } from '@nestjs/common/exceptions/bad-request.excep
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 import { Photo } from './entities/photo.entity';
 
-@Controller('photos')
+@Controller('api/photos')
 export class PhotosController {
   constructor(private readonly photosService: PhotosService) {}
 
-  @Post()
+  @Post('api/photos')
   async create(@Body() createPhotoDto: CreatePhotoDto) {
     const newPhoto = await this.photosService.findOneNom(
       createPhotoDto.nom_photo,
@@ -35,7 +35,7 @@ export class PhotosController {
     };
   }
 
-  @Get()
+  @Get('api/photos')
   async findAll() {
     const allPhoto = await this.photosService.findAll();
     if (allPhoto) {
@@ -48,7 +48,7 @@ export class PhotosController {
     };
   }
 
-  @Get(':id')
+  @Get('api/photd/:id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const photoId = await this.photosService.findOne(id);
     if (!photoId) {
@@ -61,7 +61,7 @@ export class PhotosController {
     };
   }
 
-  @Patch(':id')
+  @Patch('api/photos/:id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updatePhotoDto: UpdatePhotoDto,
@@ -78,7 +78,7 @@ export class PhotosController {
     };
   }
 
-  @Delete(':id')
+  @Delete('api/phots/:id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     const delPhoto = await this.photosService.findOne(id);
     if (!delPhoto) {
