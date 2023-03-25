@@ -23,7 +23,7 @@ export class Album extends BaseEntity {
   @ManyToOne(() => User, (user) => user.album)
   @JoinColumn()
   user: User[];
-  @ManyToMany(() => Photo)
+  @ManyToMany(() => Photo, (photo) => photo.id)
   @JoinTable()
   photo: Photo[];
 }

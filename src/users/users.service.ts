@@ -28,13 +28,15 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    const users = await User.find();
+    const users = await User.find({
+      relations: { photos: true, album: true, friend: true },
+    });
     return users;
   }
 
   async findOneByPseudo(pseudo: string): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: { photos: true, album: true },
+      relations: { photos: true, album: true, friend: true },
       where: { pseudo: pseudo },
     });
 
@@ -46,7 +48,10 @@ export class UsersService {
   }
 
   async findOneUser(pseudo: string): Promise<User | undefined> {
-    const user = await User.findOneBy({ pseudo: pseudo });
+    const user = await User.findOne({
+      relations: { photos: true, album: true, friend: true },
+      where: { pseudo: pseudo },
+    });
     console.log(user);
 
     return user;
@@ -54,7 +59,7 @@ export class UsersService {
 
   async findOneByEmail(email: string): Promise<User | undefined> {
     const userMail = await User.findOne({
-      relations: { photos: true, album: true },
+      relations: { photos: true, album: true, friend: true },
       where: { email: email },
     });
 
@@ -62,7 +67,10 @@ export class UsersService {
   }
 
   async findOneById(id: number): Promise<User | undefined> {
-    const user = await User.findOneBy({ id });
+    const user = await User.findOne({
+      relations: { photos: true, album: true, friend: true },
+      where: { id: id },
+    });
 
     if (user) {
       return user;
@@ -77,15 +85,19 @@ export class UsersService {
   ): Promise<User | undefined> {
     await User.update(id, updateUserDto);
 
-    const newUser = await User.findOneBy({
-      id: id,
+    const newUser = await User.findOne({
+      relations: { photos: true, album: true, friend: true },
+      where: { id: id },
     });
 
     return newUser;
   }
 
   async delete(id: number): Promise<User | undefined> {
-    const deleteUser = await User.findOneBy({ id: id });
+    const deleteUser = await User.findOne({
+      relations: { photos: true, album: true, friend: true },
+      where: { id: id },
+    });
     User.remove(deleteUser);
     return deleteUser;
   }

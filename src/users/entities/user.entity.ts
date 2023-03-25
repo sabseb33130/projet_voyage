@@ -67,16 +67,9 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar' })
   pays: string;
 
-  /* @ManyToMany(() => Friend)
-  @JoinTable()
-  friend: Friend[];
-
-  @OneToMany(() => Album, (album) => album.user)
-  album: Photo[];
-*/
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
-  @ManyToMany(() => Friend, { eager: true })
+  @ManyToMany(() => Friend,)
   @JoinTable()
   friend: Friend[];
 

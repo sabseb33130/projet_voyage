@@ -34,7 +34,7 @@ export class FriendsController {
     };
   }
 
-  @Get('api/friends')
+  @Get()
   async findAll() {
     const allFriend = await this.friendsService.findAll();
     if (allFriend === undefined) {
@@ -47,7 +47,7 @@ export class FriendsController {
     };
   }
 
-  @Get('api/friends/:id')
+  @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const oneFriend = await this.friendsService.findOne(id);
     if (!oneFriend) {
@@ -60,7 +60,7 @@ export class FriendsController {
     };
   }
 
-  @Patch('api/friends/:id')
+  @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateFriendDto: UpdateFriendDto,
@@ -77,7 +77,7 @@ export class FriendsController {
     };
   }
 
-  @Delete('api/friends/:id')
+  @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     const delFriend = await this.friendsService.findOne(id);
     if (!delFriend) {

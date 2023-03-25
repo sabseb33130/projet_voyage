@@ -19,7 +19,7 @@ import { Photo } from './entities/photo.entity';
 export class PhotosController {
   constructor(private readonly photosService: PhotosService) {}
 
-  @Post('api/photos')
+  @Post()
   async create(@Body() createPhotoDto: CreatePhotoDto) {
     const newPhoto = await this.photosService.findOneNom(
       createPhotoDto.nom_photo,
@@ -35,7 +35,7 @@ export class PhotosController {
     };
   }
 
-  @Get('api/photos')
+  @Get()
   async findAll() {
     const allPhoto = await this.photosService.findAll();
     if (allPhoto) {
@@ -48,7 +48,7 @@ export class PhotosController {
     };
   }
 
-  @Get('api/photd/:id')
+  @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const photoId = await this.photosService.findOne(id);
     if (!photoId) {
@@ -61,7 +61,7 @@ export class PhotosController {
     };
   }
 
-  @Patch('api/photos/:id')
+  @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updatePhotoDto: UpdatePhotoDto,
@@ -78,7 +78,7 @@ export class PhotosController {
     };
   }
 
-  @Delete('api/phots/:id')
+  @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     const delPhoto = await this.photosService.findOne(id);
     if (!delPhoto) {

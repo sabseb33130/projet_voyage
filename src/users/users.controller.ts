@@ -22,13 +22,13 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { LoginDto } from 'src/auth/login.dto';
 import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 
-@ApiTags('users')
-@Controller('users')
+@ApiTags('api/users')
+@Controller('api/users')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post('api/register')
+  @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const saltOrRounds = 10;
 
@@ -61,7 +61,7 @@ export class UsersController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Get('api/users')
+  @Get()
   async findAll() {
     const users = await this.usersService.findAll();
     if (!users) {
@@ -71,7 +71,7 @@ export class UsersController {
   }
   @ApiBody({ type: LoginDto })
   @UseGuards(JwtAuthGuard)
-  @Get('api/profil')
+  @Get()
   async getProfile(@Request() req) {
     const profil = await this.usersService.findOneByPseudo(req.user.username);
     return profil;
@@ -79,7 +79,7 @@ export class UsersController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Patch('api/users')
+  @Patch()
   async update(@Body() updateUserDto: UpdateUserDto, @Request() req) {
     const userLogged = req.user.userId;
 
@@ -100,7 +100,7 @@ export class UsersController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Delete('api/users')
+  @Delete()
   async removeUser(@Request() req) {
     const userDeleted: number = req.user.userId;
 
