@@ -8,6 +8,7 @@ export class PhotosService {
   async create(createPhotoDto: CreatePhotoDto): Promise<Photo | undefined> {
     const newPhoto = new Photo();
     newPhoto.nom_photo = createPhotoDto.nom_photo;
+
     await newPhoto.save();
     return newPhoto;
   }
