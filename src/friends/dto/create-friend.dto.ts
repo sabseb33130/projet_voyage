@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 export class CreateFriendDto {
   @ApiProperty()
   @IsString()
@@ -9,6 +9,6 @@ export class CreateFriendDto {
   @IsString()
   invitation_ok: string;
   @ApiProperty()
-  @IsString()
-  role: number;
+  @IsNumber()
+  Access_level: number;
 }

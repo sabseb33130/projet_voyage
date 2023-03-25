@@ -5,10 +5,16 @@ import { Friend } from './entities/friend.entity';
 
 @Injectable()
 export class FriendsService {
-  create(createFriendDto: CreateFriendDto): Promise<Friend | undefined> {
+  create(
+    createFriendDto: CreateFriendDto,
+    userId: number,
+  ): Promise<Friend | undefined> {
     const addFriend = new Friend();
     addFriend.invitation = createFriendDto.invitation;
+    /*  addFriend.user[0].id = userId; */
     const newFriend = addFriend.save();
+    console.log(addFriend);
+
     return newFriend;
   }
 
