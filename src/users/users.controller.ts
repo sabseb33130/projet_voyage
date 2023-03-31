@@ -67,6 +67,16 @@ export class UsersController {
     }
     return users;
   }
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('/compteperso')
+  async findUser(@Request() req) {
+    const users = await this.usersService.findOneById(req.user.userId);
+    if (!users) {
+      throw new NotFoundException('Pas de compte enregistreé pour l instant');
+    }
+    return users;
+  }
   @ApiBody({ type: LoginDto })
   @UseGuards(JwtAuthGuard)
   @Get('profil')

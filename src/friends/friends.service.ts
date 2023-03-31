@@ -7,7 +7,7 @@ import { Friend } from './entities/friend.entity';
 export class FriendsService {
   create(
     createFriendDto: CreateFriendDto,
-    userId: number,
+    /* userId: number, */
   ): Promise<Friend | undefined> {
     const addFriend = new Friend();
     addFriend.invitation = createFriendDto.invitation;
