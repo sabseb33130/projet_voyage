@@ -29,14 +29,14 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     const users = await User.find({
-      relations: { photos: true, album: true, friend: true },
+      relations: {},
     });
     return users;
   }
 
   async findOneByPseudo(pseudo: string): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: { photos: true, album: true, friend: true },
+      relations: {},
       where: { pseudo: pseudo },
     });
 
@@ -49,7 +49,7 @@ export class UsersService {
 
   async findOneUser(pseudo: string): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: { photos: true, album: true, friend: true },
+      relations: {},
       where: { pseudo: pseudo },
     });
     console.log(user);
@@ -59,7 +59,7 @@ export class UsersService {
 
   async findOneByEmail(email: string): Promise<User | undefined> {
     const userMail = await User.findOne({
-      relations: { photos: true, album: true, friend: true },
+      relations: {},
       where: { email: email },
     });
 
@@ -68,7 +68,7 @@ export class UsersService {
 
   async findOneById(id: number): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: { photos: true, album: true, friend: true },
+      relations: { photos: true },
       where: { id: id },
     });
 
@@ -86,7 +86,7 @@ export class UsersService {
     await User.update(id, updateUserDto);
 
     const newUser = await User.findOne({
-      relations: { photos: true, album: true, friend: true },
+      relations: {},
       where: { id: id },
     });
 
@@ -95,7 +95,7 @@ export class UsersService {
 
   async delete(id: number): Promise<User | undefined> {
     const deleteUser = await User.findOne({
-      relations: { photos: true, album: true, friend: true },
+      relations: {},
       where: { id: id },
     });
     User.remove(deleteUser);

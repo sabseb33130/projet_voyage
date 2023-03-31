@@ -22,8 +22,4 @@ export class Friend extends BaseEntity {
 
   @Column({ type: 'integer', default: 0 })
   Access_level: number;
-
-  @ManyToMany(() => User)
-  @JoinTable()
-  user: User[];
 }

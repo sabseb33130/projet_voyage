@@ -2,14 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
 import { Photo } from './entities/photo.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class PhotosService {
-  async create(createPhotoDto: CreatePhotoDto): Promise<Photo | undefined> {
+  async create(
+    createPhotoDto: CreatePhotoDto,
+    user: User,
+  ): Promise<Photo | undefined> {
     const newPhoto = new Photo();
     newPhoto.nom_photo = createPhotoDto.nom_photo;
-
-    await newPhoto.save();
+    newPhoto.user = user;
+    await Photo.save(newPhoto);
     return newPhoto;
   }
 

@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { PhotosService } from './photos.service';
 import { CreatePhotoDto } from './dto/create-photo.dto';
@@ -14,23 +16,29 @@ import { UpdatePhotoDto } from './dto/update-photo.dto';
 import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 import { Photo } from './entities/photo.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('api/photos')
 export class PhotosController {
-  constructor(private readonly photosService: PhotosService) {}
-
+  constructor(
+    private readonly photosService: PhotosService,
+    private readonly usersService: UsersService,
+  ) {}
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createPhotoDto: CreatePhotoDto) {
+  async create(@Body() createPhotoDto: CreatePhotoDto, @Request() req) {
+    const user = await this.usersService.findOneById(req.user.userId);
     const newPhoto = await this.photosService.findOneNom(
       createPhotoDto.nom_photo,
     );
     if (newPhoto) {
       throw new BadRequestException('Photo déjà enregistrée');
     }
-    const photoNew = await this.photosService.create(createPhotoDto);
+    const photoNew = await this.photosService.create(createPhotoDto, user);
     return {
       status: 201,
-      message: 'Votre photo a été bien ajouté',
+      message: 'Votre photo a été bien ajoutée',
       data: photoNew,
     };
   }

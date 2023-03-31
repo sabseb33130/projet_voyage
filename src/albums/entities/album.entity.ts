@@ -19,11 +19,6 @@ export class Album extends BaseEntity {
 
   @Column({ type: 'varchar' })
   nom_album: string;
-
-  @ManyToOne(() => User, (user) => user.album)
-  @JoinColumn()
-  user: User[];
-  @ManyToMany(() => Photo, (photo) => photo.id)
-  @JoinTable()
-  photo: Photo[];
+  @ManyToMany(() => Photo)
+  Photo: Photo[];
 }
