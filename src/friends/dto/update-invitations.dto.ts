@@ -1,8 +1,8 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
-import { CreateFriendDto } from './create-friend.dto';
+import { CreateInvitationsDto } from './create-invitations.dto';
 
-export class UpdateFriendDto extends PartialType(CreateFriendDto) {
+export class UpdateInvitationsDto extends PartialType(CreateInvitationsDto) {
   @ApiProperty()
   @IsOptional()
   invitation_ok?: string;

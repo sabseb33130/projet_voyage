@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Friend extends BaseEntity {
+export class Invitations extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column({ type: 'varchar' })

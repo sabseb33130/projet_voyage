@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-export class CreateFriendDto {
+export class CreateInvitationsDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()

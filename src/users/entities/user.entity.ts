@@ -1,16 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 
-import { Album } from 'src/albums/entities/album.entity';
-import { Friend } from 'src/friends/entities/friend.entity';
 import { Photo } from 'src/photos/entities/photo.entity';
 import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,

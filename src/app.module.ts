@@ -2,16 +2,18 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-import { FriendsModule } from './friends/friends.module';
+
 import { AlbumsModule } from './albums/albums.module';
 import { PhotosModule } from './photos/photos.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Album } from './albums/entities/album.entity';
-import { Friend } from './friends/entities/friend.entity';
+
 import { Photo } from './photos/entities/photo.entity';
 import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { Invitations } from './friends/entities/invitations.entity';
+import { InvitationsModule } from './friends/invitations.module';
 
 @Module({
   imports: [
@@ -25,13 +27,13 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Friend, Photo, Album],
+      entities: [User, Invitations, Photo, Album],
       autoLoadEntities: true,
       synchronize: true,
       logging: true,
     }),
     UsersModule,
-    FriendsModule,
+    InvitationsModule,
     PhotosModule,
     AlbumsModule,
     AuthModule,

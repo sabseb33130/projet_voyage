@@ -22,8 +22,8 @@ export class PhotosService {
     return allPhoto;
   }
 
-  async findOne(id: number): Promise<Photo | undefined> {
-    const onePhoto = await Photo.findOneBy({ id });
+  async findOne(id: number): Promise<Photo[] | undefined> {
+    const onePhoto = await Photo.find({ where: { id: id } });
     return onePhoto;
   }
   async findOneNom(nom_photo): Promise<Photo | undefined> {

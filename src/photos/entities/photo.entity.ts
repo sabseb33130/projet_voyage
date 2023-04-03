@@ -25,7 +25,6 @@ export class Photo extends BaseEntity {
   /*   @Column({ type: 'date' })
   date_photo: string; */
   @ManyToMany(() => Album)
-  @JoinTable()
   album: Album[];
   @ApiProperty()
   @ManyToOne(() => User, (user) => user.photos)

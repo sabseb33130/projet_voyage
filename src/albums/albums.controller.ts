@@ -15,11 +15,15 @@ import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
+import { PhotosService } from 'src/photos/photos.service';
 
 @ApiTags('albums')
 @Controller('api/albums')
 export class AlbumsController {
-  constructor(private readonly albumsService: AlbumsService) {}
+  constructor(
+    private readonly albumsService: AlbumsService,
+    private readonly photosService: PhotosService,
+  ) {}
   @Post()
   async create(@Body() createAlbumDto: CreateAlbumDto) {
     const verifAlbum = await this.albumsService.findOneNom(

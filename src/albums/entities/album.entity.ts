@@ -20,5 +20,6 @@ export class Album extends BaseEntity {
   @Column({ type: 'varchar' })
   nom_album: string;
   @ManyToMany(() => Photo)
+  @JoinTable()
   Photo: Photo[];
 }
