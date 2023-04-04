@@ -1,13 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { use } from 'passport';
+
 import { Album } from 'src/albums/entities/album.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
-  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
