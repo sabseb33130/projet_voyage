@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-
+import { Friends } from 'src/friends/entities/friend.entity';
 import { Photo } from 'src/photos/entities/photo.entity';
 import {
   BaseEntity,
@@ -63,4 +63,6 @@ export class User extends BaseEntity {
   pays: string;
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
+  @OneToMany(() => Friends, (friends) => friends.user)
+  friends: Friends[];
 }

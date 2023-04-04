@@ -1,14 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/users/entities/user.entity';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Invitations extends BaseEntity {
