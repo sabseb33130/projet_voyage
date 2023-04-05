@@ -9,6 +9,7 @@ import {
   NotFoundException,
   Delete,
   Param,
+  Patch,
 } from '@nestjs/common';
 import FriendsService from './friends.service';
 import { CreateFriendDto } from './dto/create-friend.dto';
@@ -58,7 +59,7 @@ export default class FriendsController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @Get('/request/:id')
+  @Patch('/request/:id')
   acceptFriendRequest(@Param('id') id: string) {
     return this.friendsService.friendAccept(+id);
   }

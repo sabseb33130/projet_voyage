@@ -6,10 +6,12 @@ import User from 'src/users/entities/user.entity';
 
 @Injectable()
 export default class FriendsService {
-  async create(user: User, friend: User) {
-    const newFriend = await Friends.create({ user, friend }).save();
-
-    return newFriend;
+  async create(createFriendDto, id) {
+    const newFriend = new Friends();
+    newFriend.friend = createFriendDto.friend;
+    newFriend.user = id;
+    const createFriend = Friends.save(newFriend);
+    return createFriend;
   }
 
   async findFriend(user: User) {
@@ -39,7 +41,6 @@ export default class FriendsService {
       if (!friend) throw new NotFoundException();
 
       friend.isFriends = true;
-
       return await friend.save();
     }
   }
