@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { InvitationsController } from './invitation.controller';
-import { InvitationsService } from './invitations.service';
+import InvitationsController from './invitation.controller';
+import InvitationsService from './invitations.service';
 
 describe('InvitationsController', () => {
   let controller: InvitationsController;

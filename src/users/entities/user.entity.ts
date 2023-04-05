@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { Friends } from 'src/friends/entities/friend.entity';
-import { Photo } from 'src/photos/entities/photo.entity';
+import Friends from 'src/friends/entities/friend.entity';
+import Photo from 'src/photos/entities/photo.entity';
 import {
   BaseEntity,
   Column,
@@ -13,7 +13,7 @@ import {
 
 @Entity('users')
 @Unique(['email', 'pseudo'])
-export class User extends BaseEntity {
+export default class User extends BaseEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -63,6 +63,8 @@ export class User extends BaseEntity {
   pays: string;
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
-  @OneToMany(() => Friends, (friends) => friends.user)
-  friends: Friends[];
+  @OneToMany(() => Friends, (friend) => friend.user)
+  friends: User[];
+  @OneToMany(() => Friends, (friend) => friend.friend)
+  friend: User[];
 }

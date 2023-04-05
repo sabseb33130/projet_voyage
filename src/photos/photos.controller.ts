@@ -10,17 +10,16 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { PhotosService } from './photos.service';
+import PhotosService from './photos.service';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
 import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
-import { Photo } from './entities/photo.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { UsersService } from 'src/users/users.service';
+import UsersService from 'src/users/users.service';
 
 @Controller('api/photos')
-export class PhotosController {
+export default class PhotosController {
   constructor(
     private readonly photosService: PhotosService,
     private readonly usersService: UsersService,

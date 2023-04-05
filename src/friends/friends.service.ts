@@ -1,36 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateFriendDto } from './dto/create-friend.dto';
 import { UpdateFriendDto } from './dto/update-friend.dto';
-import { Friends } from './entities/friend.entity';
+import Friends from './entities/friend.entity';
+import User from 'src/users/entities/user.entity';
 
 @Injectable()
-export class FriendsService {
-  async create(createFriendDto: CreateFriendDto) {
-    const newFriend = new Friends();
-    newFriend.isFriends = createFriendDto.isFriends;
-    const addFriend = await newFriend.save();
-    return addFriend;
+export default class FriendsService {
+  async create(user: User, friend: User) {
+    const newFriend = await Friends.create({ user, friend }).save();
+
+    return newFriend;
   }
 
-  async findAll() {
-    const allFriends = await Friends.find();
-    return allFriends;
+  async findFriend(user: User) {
+    const friendFind = await Friends.find({
+      where: [
+        { isFriends: true, user: { id: user.id } },
+        { isFriends: true, friend: { id: user.id } },
+      ],
+      relations: { user: true, friend: true },
+    });
+    return friendFind;
+  }
+  async friendRequest(user: User) {
+    const requestFriend = await Friends.find({
+      where: {
+        isFriends: false,
+        user: { id: user.id },
+      },
+      relations: { user: true },
+    });
+    return requestFriend;
+  }
+  async friendAccept(id: number) {
+    {
+      const friend = await Friends.findOneBy({ id });
+
+      if (!friend) throw new NotFoundException();
+
+      friend.isFriends = true;
+
+      return await friend.save();
+    }
   }
 
-  async findOne(id: number) {
-    const oneFriend = await Friends.findOneBy({ id: id });
-    return oneFriend;
-  }
-
-  async update(id: number, updateFriendDto: UpdateFriendDto) {
-    await Friends.update(id, updateFriendDto);
-    const findOne = await Friends.findOneBy({ id: id });
-    return findOne;
-  }
-
-  async remove(id: number) {
-    const findOne = await Friends.findOneBy({ id });
-    const removedFriend = await findOne.remove();
-    return removedFriend;
+  async removeRequest(id: number, user: User) {
+    const removeFriend = await Friends.findOne({
+      where: {
+        user: {
+          id: user.id,
+        },
+        friend: {
+          id: id,
+        },
+      },
+    });
+    const deleteFriend = await removeFriend.remove();
+    return deleteFriend;
   }
 }

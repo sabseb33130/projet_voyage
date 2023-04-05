@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
-import { Photo } from './entities/photo.entity';
-import { User } from 'src/users/entities/user.entity';
+import Photo from './entities/photo.entity';
+import User from 'src/users/entities/user.entity';
 
 @Injectable()
-export class PhotosService {
+export default class PhotosService {
   async create(
     createPhotoDto: CreatePhotoDto,
     user: User,

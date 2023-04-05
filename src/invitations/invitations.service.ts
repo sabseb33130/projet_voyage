@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Invitations } from './entities/invitations.entity';
+import Invitations from './entities/invitations.entity';
 import { CreateInvitationsDto } from './dto/create-invitations.dto';
 import { UpdateInvitationsDto } from './dto/update-invitations.dto';
 
 @Injectable()
-export class InvitationsService {
+export default class InvitationsService {
   create(
     createInvitationsDto: CreateInvitationsDto,
     /* userId: number, */

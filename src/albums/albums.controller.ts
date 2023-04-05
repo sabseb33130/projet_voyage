@@ -14,16 +14,12 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { Album } from './entities/album.entity';
-import { PhotosService } from 'src/photos/photos.service';
+import Album from './entities/album.entity';
 
 @ApiTags('albums')
 @Controller('api/albums')
 export class AlbumsController {
-  constructor(
-    private readonly albumsService: AlbumsService,
-    private readonly photosService: PhotosService,
-  ) {}
+  constructor(private readonly albumsService: AlbumsService) {}
   @Post()
   async create(@Body() createAlbumDto: CreateAlbumDto) {
     const verifAlbum = await this.albumsService.findOneNom(
@@ -51,7 +47,7 @@ export class AlbumsController {
     return allAlbums;
   }
 
-  @Get('/:id')
+  @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const oneAlbum = await this.albumsService.findOne(+id);
     if (!oneAlbum) {

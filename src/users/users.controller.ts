@@ -12,7 +12,7 @@ import {
   Delete,
   NotFoundException,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import UsersService from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -25,7 +25,7 @@ import { log } from 'console';
 @ApiTags('api/users')
 @Controller('api/users')
 @UseInterceptors(ClassSerializerInterceptor)
-export class UsersController {
+export default class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()

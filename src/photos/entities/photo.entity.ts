@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { Album } from 'src/albums/entities/album.entity';
-import { User } from 'src/users/entities/user.entity';
+import Album from 'src/albums/entities/album.entity';
+import User from 'src/users/entities/user.entity';
 import {
   BaseEntity,
   Column,
@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 @Entity()
-export class Photo extends BaseEntity {
+export default class Photo extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column({ type: 'varchar' })
@@ -22,8 +22,8 @@ export class Photo extends BaseEntity {
   lon: number; */
   /*   @Column({ type: 'date' })
   date_photo: string; */
-  @ManyToMany(() => Album)
-  album: Album[];
+  /* @ManyToMany(() => Album)
+  album: Album[]; */
   @ApiProperty()
   @ManyToOne(() => User, (user) => user.photos)
   user: User;

@@ -1,7 +1,9 @@
-import { IsBoolean, IsNotEmpty } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateFriendDto {
+  @ApiProperty()
   @IsNotEmpty()
-  @IsBoolean()
-  isFriends: boolean;
+  @IsString()
+  friend: string;
 }

@@ -12,10 +12,10 @@ import {
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { CreateInvitationsDto } from './dto/create-invitations.dto';
 import { UpdateInvitationsDto } from './dto/update-invitations.dto';
-import { InvitationsService } from './invitations.service';
+import InvitationsService from './invitations.service';
 
 @Controller('api/Invitationss')
-export class InvitationsController {
+export default class InvitationsController {
   InvitationssService: any;
   constructor(private readonly invitationsService: InvitationsService) {}
 
