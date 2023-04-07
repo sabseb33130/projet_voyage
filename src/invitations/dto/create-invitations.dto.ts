@@ -5,10 +5,10 @@ export class CreateInvitationsDto {
   @IsString()
   @IsNotEmpty()
   invitation: string;
-  @ApiProperty()
+  /*  @ApiProperty()
   @IsString()
   invitation_ok: string;
   @ApiProperty()
   @IsNumber()
-  Access_level: number;
+  Access_level: number; */
 }

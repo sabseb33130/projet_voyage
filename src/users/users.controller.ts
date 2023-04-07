@@ -27,7 +27,7 @@ import { log } from 'console';
 @UseInterceptors(ClassSerializerInterceptor)
 export default class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
+  @ApiBody({ type: CreateUserDto })
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const saltOrRounds = 10;
@@ -72,19 +72,13 @@ export default class UsersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('/compteperso')
-  async findUser(@Request() @GetUser() GetUser) {
+  async findUser(@GetUser() GetUser) {
     const users = await this.usersService.findOneById(GetUser.userId);
+
     if (!users) {
       throw new NotFoundException('Pas de compte enregistreé pour l instant');
     }
     return users;
-  }
-  @ApiBody({ type: LoginDto })
-  @UseGuards(JwtAuthGuard)
-  @Get('profil')
-  async getProfile(@Request() @GetUser() GetUser) {
-    const profil = await this.usersService.findOneByPseudo(GetUser.username);
-    return profil;
   }
 
   @ApiBearerAuth()
@@ -97,7 +91,6 @@ export default class UsersController {
       userLogged,
       updateUserDto,
     );
-    //console.log('apres update', userUpdate);
 
     return {
       statusCode: 201,

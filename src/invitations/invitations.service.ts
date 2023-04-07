@@ -2,18 +2,19 @@ import { Injectable } from '@nestjs/common';
 import Invitations from './entities/invitations.entity';
 import { CreateInvitationsDto } from './dto/create-invitations.dto';
 import { UpdateInvitationsDto } from './dto/update-invitations.dto';
+import User from 'src/users/entities/user.entity';
 
 @Injectable()
 export default class InvitationsService {
   create(
     createInvitationsDto: CreateInvitationsDto,
-    /* userId: number, */
+    userId: number,
   ): Promise<Invitations | undefined> {
     const addInvitations = new Invitations();
     addInvitations.invitation = createInvitationsDto.invitation;
-    /*  addInvitations.user[0].id = userId; */
+    addInvitations.user = userId;
+
     const newInvitations = addInvitations.save();
-    console.log(addInvitations);
 
     return newInvitations;
   }

@@ -3,6 +3,7 @@ import { CreatePhotoDto } from './dto/create-photo.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
 import Photo from './entities/photo.entity';
 import User from 'src/users/entities/user.entity';
+import Album from 'src/albums/entities/album.entity';
 
 @Injectable()
 export default class PhotosService {
@@ -10,6 +11,7 @@ export default class PhotosService {
     createPhotoDto: CreatePhotoDto,
     user: User,
   ): Promise<Photo | undefined> {
+    /*   const filtre = Album.findOneBy({ id: createPhotoDto.idAlbum }); */
     const newPhoto = new Photo();
     newPhoto.nom_photo = createPhotoDto.nom_photo;
     newPhoto.user = user;
@@ -26,7 +28,7 @@ export default class PhotosService {
     const onePhoto = await Photo.find({ where: { id: id } });
     return onePhoto;
   }
-  async findOneNom(nom_photo): Promise<Photo | undefined> {
+  async findOneNom(nom_photo: string): Promise<Photo | undefined> {
     const nomPhoto = await Photo.findOneBy({ nom_photo });
     return nomPhoto;
   }

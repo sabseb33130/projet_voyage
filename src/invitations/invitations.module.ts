@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import InvitationsController from './invitation.controller';
 import InvitationsService from './invitations.service';
+import { JwtService } from '@nestjs/jwt';
+import { AuthService } from 'src/auth/auth.service';
+import UsersService from 'src/users/users.service';
 
 @Module({
   controllers: [InvitationsController],
-  providers: [InvitationsService],
+  providers: [InvitationsService, UsersService],
 })
 export class InvitationsModule {}

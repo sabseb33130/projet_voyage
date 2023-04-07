@@ -52,7 +52,6 @@ export default class UsersService {
       relations: {},
       where: { pseudo: pseudo },
     });
-    console.log(user);
 
     return user;
   }
@@ -68,7 +67,7 @@ export default class UsersService {
 
   async findOneById(id: number): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: { photos: true },
+      relations: { photos: true, invitations: true },
       where: { id: id },
     });
 

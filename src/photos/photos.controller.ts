@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import PhotosService from './photos.service';
@@ -17,17 +16,32 @@ import { BadRequestException } from '@nestjs/common/exceptions/bad-request.excep
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import UsersService from 'src/users/users.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { AlbumsService } from 'src/albums/albums.service';
+import { GetUser } from 'src/auth/get_user.decorator';
 
 @Controller('api/photos')
 export default class PhotosController {
   constructor(
     private readonly photosService: PhotosService,
     private readonly usersService: UsersService,
+    private readonly albumsService: AlbumsService,
   ) {}
+
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createPhotoDto: CreatePhotoDto, @Request() req) {
-    const user = await this.usersService.findOneById(req.user.userId);
+  async create(
+    @Body() createPhotoDto: CreatePhotoDto,
+
+    @GetUser() getUser,
+  ) {
+    const user = await this.usersService.findOneById(getUser.userId);
+    const albumId = await this.albumsService.findAll();
+    /*    const albumNew = albumId.find(
+      (elm: Album) => elm.id == createPhotoDto.idAlbum,
+    ); */
+
     const newPhoto = await this.photosService.findOneNom(
       createPhotoDto.nom_photo,
     );
@@ -45,7 +59,7 @@ export default class PhotosController {
   @Get()
   async findAll() {
     const allPhoto = await this.photosService.findAll();
-    if (allPhoto) {
+    if (!allPhoto) {
       throw new NotFoundException('Pas de photo encore enregistrée');
     }
     return {

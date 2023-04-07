@@ -31,7 +31,7 @@ import Friends from './friends/entities/friend.entity';
       entities: [User, Invitations, Photo, Album, Friends],
       autoLoadEntities: true,
       synchronize: true,
-      logging: true,
+      logging: false,
     }),
     UsersModule,
     InvitationsModule,

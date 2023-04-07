@@ -8,20 +8,30 @@ import {
   Delete,
   ConflictException,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import Album from './entities/album.entity';
-
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { GetUser } from 'src/auth/get_user.decorator';
+import UsersService from 'src/users/users.service';
+@UseGuards(JwtAuthGuard)
 @ApiTags('albums')
 @Controller('api/albums')
+@ApiBearerAuth()
 export class AlbumsController {
-  constructor(private readonly albumsService: AlbumsService) {}
+  constructor(
+    private readonly albumsService: AlbumsService,
+    private readonly usersService: UsersService,
+  ) {}
+
   @Post()
-  async create(@Body() createAlbumDto: CreateAlbumDto) {
+  async create(@Body() createAlbumDto: CreateAlbumDto, @GetUser() getUser) {
+    const user = await this.usersService.findOneById(getUser.userId);
     const verifAlbum = await this.albumsService.findOneNom(
       createAlbumDto.nom_album,
     );
@@ -29,7 +39,7 @@ export class AlbumsController {
     if (verifAlbum) {
       throw new ConflictException('Album déjà créé ');
     }
-    const albumNew = this.albumsService.create(createAlbumDto);
+    const albumNew = this.albumsService.create(createAlbumDto, user.id);
     return {
       statusCode: 201,
       message: 'Nouvel album créé',
@@ -61,12 +71,10 @@ export class AlbumsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAlbumDto: UpdateAlbumDto,
   ) {
-    const verifAlbum = await this.albumsService.findOneNom(
-      updateAlbumDto.nom_album,
-    );
+    const verifAlbum = await this.albumsService.findOne(id);
 
     if (!verifAlbum) {
-      throw new NotFoundException("Cette album n'existe pas");
+      throw new ConflictException("Cette album n'existe pas");
     }
     const upAlbum = this.albumsService.update(+id, updateAlbumDto);
     return {

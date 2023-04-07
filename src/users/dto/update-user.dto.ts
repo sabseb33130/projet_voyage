@@ -36,7 +36,11 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  addresse: string;
+  addresse_line1: string;
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  adresse_line2: string;
 
   @ApiProperty()
   @IsOptional()

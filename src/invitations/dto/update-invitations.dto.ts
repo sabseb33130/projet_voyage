@@ -5,8 +5,5 @@ import { CreateInvitationsDto } from './create-invitations.dto';
 export class UpdateInvitationsDto extends PartialType(CreateInvitationsDto) {
   @ApiProperty()
   @IsOptional()
-  invitation_ok?: string;
-  @ApiProperty()
-  @IsOptional()
   role: number;
 }

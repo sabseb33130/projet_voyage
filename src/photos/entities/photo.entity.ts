@@ -6,10 +6,12 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { JoinAttribute } from 'typeorm/query-builder/JoinAttribute';
 @Entity()
 export default class Photo extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -22,8 +24,8 @@ export default class Photo extends BaseEntity {
   lon: number; */
   /*   @Column({ type: 'date' })
   date_photo: string; */
-  /* @ManyToMany(() => Album)
-  album: Album[]; */
+  @ManyToMany(() => Album, (album) => album.id)
+  album: [number];
   @ApiProperty()
   @ManyToOne(() => User, (user) => user.photos)
   user: User;

@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import User from 'src/users/entities/user.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export default class Invitations extends BaseEntity {
@@ -7,9 +15,11 @@ export default class Invitations extends BaseEntity {
   @Column({ type: 'varchar' })
   invitation: string;
 
-  @Column({ type: 'varchar', default: 'en attente' })
+  /*   @Column({ type: 'varchar', default: 'en attente' })
   invitation_ok: string;
 
   @Column({ type: 'integer', default: 0 })
-  Access_level: number;
+  Access_level: number; */
+  @ManyToOne(() => User, (user) => user.invitations, { cascade: true })
+  user: number;
 }

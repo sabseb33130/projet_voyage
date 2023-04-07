@@ -7,20 +7,29 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { CreateInvitationsDto } from './dto/create-invitations.dto';
 import { UpdateInvitationsDto } from './dto/update-invitations.dto';
 import InvitationsService from './invitations.service';
+import { GetUser } from 'src/auth/get_user.decorator';
+import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('api/Invitationss')
 export default class InvitationsController {
-  InvitationssService: any;
   constructor(private readonly invitationsService: InvitationsService) {}
-
+  @ApiBody({ type: CreateInvitationsDto })
   @Post()
-  async create(@Body() createInvitationsDto: CreateInvitationsDto) {
+  async create(
+    @Body() createInvitationsDto: CreateInvitationsDto,
+    @GetUser() getUser,
+  ) {
     const newInvitations = await this.invitationsService.findOneInvit(
       createInvitationsDto.invitation,
     );
@@ -29,6 +38,7 @@ export default class InvitationsController {
     }
     const InvitationsNew = await this.invitationsService.create(
       createInvitationsDto,
+      getUser.userId,
     );
 
     return {
@@ -86,11 +96,11 @@ export default class InvitationsController {
 
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    const delInvitations = await this.InvitationssService.findOne(id);
+    const delInvitations = await this.invitationsService.findOne(id);
     if (!delInvitations) {
       throw new NotFoundException('Cette invitation est déjà supprimée');
     }
-    const InvitationsDel = await this.InvitationssService.remove(id);
+    const InvitationsDel = await this.invitationsService.remove(id);
     return {
       status: 200,
       message: `Votre invitation est supprimée`,
