@@ -19,6 +19,7 @@ import Album from './entities/album.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GetUser } from 'src/auth/get_user.decorator';
 import UsersService from 'src/users/users.service';
+import { log } from 'console';
 @UseGuards(JwtAuthGuard)
 @ApiTags('albums')
 @Controller('api/albums')
@@ -35,11 +36,12 @@ export class AlbumsController {
     const verifAlbum = await this.albumsService.findOneNom(
       createAlbumDto.nom_album,
     );
+    console.log(user);
 
     if (verifAlbum) {
       throw new ConflictException('Album déjà créé ');
     }
-    const albumNew = this.albumsService.create(createAlbumDto, user.id);
+    const albumNew = this.albumsService.create(createAlbumDto, user);
     return {
       statusCode: 201,
       message: 'Nouvel album créé',
@@ -76,6 +78,7 @@ export class AlbumsController {
     if (!verifAlbum) {
       throw new ConflictException("Cette album n'existe pas");
     }
+
     const upAlbum = this.albumsService.update(+id, updateAlbumDto);
     return {
       statusCode: 201,

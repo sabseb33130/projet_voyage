@@ -7,6 +7,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -63,10 +64,14 @@ export default class User extends BaseEntity {
   @ApiProperty()
   @Column({ type: 'varchar' })
   pays: string;
-  @OneToMany(() => Photo, (photo) => photo.user)
+  @OneToMany(() => Photo, (photo) => photo.user, { eager: true, cascade: true })
   photos: Photo[];
-  /* @ManyToMany(() => Album, { eager: true })
-  albums: Album[]; */
+  @ManyToMany(() => Album, (album) => album.user, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinTable()
+  albums: Album[];
 
   @OneToMany(() => Invitations, (invitations) => invitations.user)
   invitations: Invitations[];

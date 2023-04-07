@@ -6,4 +6,8 @@ export class UpdatePhotoDto extends PartialType(CreatePhotoDto) {
   @ApiProperty()
   @IsNotEmpty()
   albumId: number;
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  nom_photo: string;
 }

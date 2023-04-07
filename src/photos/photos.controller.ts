@@ -94,6 +94,9 @@ export default class PhotosController {
     if (!upPhoto) {
       throw new NotFoundException(`La photo n'existe pas `);
     }
+    const verifAlbum = await this.albumsService.findOne(updatePhotoDto.albumId);
+    if (verifAlbum)
+      throw new ConflictException('La photo est déjà dans l album');
     const photoUp = await this.photosService.update(id, updatePhotoDto);
     return {
       status: 200,

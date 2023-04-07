@@ -6,4 +6,7 @@ export class CreateAlbumDto {
   @IsNotEmpty()
   @IsString()
   nom_album: string;
+  /*   @ApiProperty()
+  @IsNotEmpty()
+  user: number; */
 }

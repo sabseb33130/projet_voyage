@@ -2,16 +2,17 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import Album from './entities/album.entity';
+import User from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AlbumsService {
   async create(
     createAlbumDto: CreateAlbumDto,
-    get_user: number,
+    user: User,
   ): Promise<Album | undefined> {
     const newAlbum = new Album();
     newAlbum.nom_album = createAlbumDto.nom_album;
-    newAlbum.user = get_user;
+    newAlbum.user = [user];
     await newAlbum.save();
 
     return newAlbum;
@@ -43,6 +44,7 @@ export class AlbumsService {
     updateAlbumDto: UpdateAlbumDto,
   ): Promise<Album | undefined> {
     await Album.update(id, updateAlbumDto);
+
     const updateAlbum = await Album.findOneBy({ id });
     return updateAlbum;
   }

@@ -18,12 +18,7 @@ export default class Photo extends BaseEntity {
   id: number;
   @Column({ type: 'varchar' })
   nom_photo: string;
-  /* @Column({ type: 'numeric' })
-   lat: number;
-  @Column({ type: 'numeric' })
-  lon: number; */
-  /*   @Column({ type: 'date' })
-  date_photo: string; */
+
   @ManyToMany(() => Album, (album) => album.photos)
   albums: Album[];
   @ApiProperty()
