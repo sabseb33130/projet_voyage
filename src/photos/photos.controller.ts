@@ -8,6 +8,9 @@ import {
   Delete,
   ParseIntPipe,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
+  ConflictException,
 } from '@nestjs/common';
 import PhotosService from './photos.service';
 import { CreatePhotoDto } from './dto/create-photo.dto';
@@ -19,6 +22,8 @@ import UsersService from 'src/users/users.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AlbumsService } from 'src/albums/albums.service';
 import { GetUser } from 'src/auth/get_user.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import Album from 'src/albums/entities/album.entity';
 
 @Controller('api/photos')
 export default class PhotosController {
@@ -37,17 +42,15 @@ export default class PhotosController {
     @GetUser() getUser,
   ) {
     const user = await this.usersService.findOneById(getUser.userId);
-    const albumId = await this.albumsService.findAll();
-    /*    const albumNew = albumId.find(
-      (elm: Album) => elm.id == createPhotoDto.idAlbum,
-    ); */
+    const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
+    if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
 
     const newPhoto = await this.photosService.findOneNom(
       createPhotoDto.nom_photo,
     );
-    if (newPhoto) {
-      throw new BadRequestException('Photo déjà enregistrée');
-    }
+    if (newPhoto && verifAlbum)
+      throw new ConflictException('Photo déjà enregistrée');
+
     const photoNew = await this.photosService.create(createPhotoDto, user);
     return {
       status: 201,

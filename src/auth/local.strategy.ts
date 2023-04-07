@@ -12,7 +12,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(username: string, password: string): Promise<any> {
     const check = await User.find({ where: { pseudo: username } });
-    console.log(check);
 
     if (!check) {
       throw new UnauthorizedException();

@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import Album from 'src/albums/entities/album.entity';
-import Friends from 'src/friends/entities/friend.entity';
 import Invitations from 'src/invitations/entities/invitations.entity';
 import Photo from 'src/photos/entities/photo.entity';
 import {
   BaseEntity,
   Column,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,
@@ -65,12 +65,9 @@ export default class User extends BaseEntity {
   pays: string;
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
-  @OneToMany(() => Album, (album) => album.user)
-  albums: Album[];
-  @OneToMany(() => Friends, (friend) => friend.user)
-  friends: User[];
-  @OneToMany(() => Friends, (friend) => friend.friend)
-  friend: User[];
+  /* @ManyToMany(() => Album, { eager: true })
+  albums: Album[]; */
+
   @OneToMany(() => Invitations, (invitations) => invitations.user)
   invitations: Invitations[];
 }

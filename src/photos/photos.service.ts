@@ -11,10 +11,11 @@ export default class PhotosService {
     createPhotoDto: CreatePhotoDto,
     user: User,
   ): Promise<Photo | undefined> {
-    /*   const filtre = Album.findOneBy({ id: createPhotoDto.idAlbum }); */
+    const test = await Album.findOneBy({ id: createPhotoDto.albumId });
     const newPhoto = new Photo();
     newPhoto.nom_photo = createPhotoDto.nom_photo;
     newPhoto.user = user;
+    newPhoto.albums = [test];
     await Photo.save(newPhoto);
     return newPhoto;
   }

@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     // aller chercher ton user dans ta BDD
-    console.log(payload);
+
     return { userId: payload.sub, username: payload.username };
   }
 }

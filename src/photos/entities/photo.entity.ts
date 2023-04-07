@@ -24,8 +24,8 @@ export default class Photo extends BaseEntity {
   lon: number; */
   /*   @Column({ type: 'date' })
   date_photo: string; */
-  @ManyToMany(() => Album, (album) => album.id)
-  album: [number];
+  @ManyToMany(() => Album, (album) => album.photos)
+  albums: Album[];
   @ApiProperty()
   @ManyToOne(() => User, (user) => user.photos)
   user: User;

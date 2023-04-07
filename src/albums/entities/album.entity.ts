@@ -19,9 +19,9 @@ export default class Album extends BaseEntity {
 
   @Column({ type: 'varchar' })
   nom_album: string;
-  @ManyToMany(() => Photo, { eager: true })
+  @ManyToMany(() => Photo, (photo) => photo.albums, { eager: true })
   @JoinTable()
-  Photo: Photo[];
-  @ManyToOne(() => User, (user) => user.id)
+  photos: Photo[];
+  @ManyToMany(() => User)
   user: number;
 }

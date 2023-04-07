@@ -11,7 +11,9 @@ export class CreatePhotoDto {
   @IsNotEmpty()
   @IsString()
   nom_photo: string;
-
+  @ApiProperty()
+  @IsNotEmpty()
+  albumId: number;
   /* @ApiProperty()
   @IsNumber()
   lat: number;

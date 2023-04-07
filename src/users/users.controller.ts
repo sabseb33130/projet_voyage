@@ -18,9 +18,7 @@ import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags, ApiBody } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { LoginDto } from 'src/auth/login.dto';
 import { GetUser } from 'src/auth/get_user.decorator';
-import { log } from 'console';
 
 @ApiTags('api/users')
 @Controller('api/users')
@@ -106,9 +104,8 @@ export default class UsersController {
   @Delete()
   async removeUser(@GetUser() GetUser) {
     const userDeleted: number = GetUser.userId;
-    console.log(userDeleted);
+
     const data = await this.usersService.findOneById(userDeleted);
-    console.log(data);
 
     if (!data) {
       throw new NotFoundException('Votre compte à déjà été supprimé');
