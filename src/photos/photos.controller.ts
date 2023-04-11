@@ -8,22 +8,17 @@ import {
   Delete,
   ParseIntPipe,
   UseGuards,
-  UploadedFile,
-  UseInterceptors,
   ConflictException,
 } from '@nestjs/common';
 import PhotosService from './photos.service';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
-import { BadRequestException } from '@nestjs/common/exceptions/bad-request.exception';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import UsersService from 'src/users/users.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AlbumsService } from 'src/albums/albums.service';
 import { GetUser } from 'src/auth/get_user.decorator';
-import { FileInterceptor } from '@nestjs/platform-express';
-import Album from 'src/albums/entities/album.entity';
 
 @Controller('api/photos')
 export default class PhotosController {

@@ -8,19 +8,21 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export default class Album extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar' })
+  @Column({ length: 50 })
   nom_album: string;
   @ManyToMany(() => Photo, (photo) => photo.albums, {
     eager: true,
   })
   @JoinTable()
   photos: Photo[];
+
   @ManyToMany(() => User, (user) => user.albums)
   user: User[];
 }

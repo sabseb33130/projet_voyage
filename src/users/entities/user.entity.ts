@@ -30,7 +30,7 @@ export default class User extends BaseEntity {
   prenom: string;
 
   @ApiProperty()
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 50 })
   pseudo: string;
 
   @ApiProperty()

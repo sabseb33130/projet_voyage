@@ -20,6 +20,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GetUser } from 'src/auth/get_user.decorator';
 import UsersService from 'src/users/users.service';
 import { log } from 'console';
+import User from 'src/users/entities/user.entity';
 @UseGuards(JwtAuthGuard)
 @ApiTags('albums')
 @Controller('api/albums')
@@ -36,9 +37,9 @@ export class AlbumsController {
     const verifAlbum = await this.albumsService.findOneNom(
       createAlbumDto.nom_album,
     );
-    console.log(user);
 
-    if (verifAlbum) {
+    console.log(verifAlbum);
+    if (verifAlbum && getUser.userId == verifAlbum.id) {
       throw new ConflictException('Album déjà créé ');
     }
     const albumNew = this.albumsService.create(createAlbumDto, user);
@@ -72,19 +73,28 @@ export class AlbumsController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAlbumDto: UpdateAlbumDto,
+    @GetUser() getUser,
   ) {
-    const verifAlbum = await this.albumsService.findOne(id);
+    const verifUser = await User.find({ where: { id: getUser.userId } });
+    const test = verifUser.map((data, i) => data.albums);
+    //en cours verif que le user n'est pas déjà abonné a cet album
+    /*    if (test[0].find((elm) => elm.id) === undefined)
+      throw new NotFoundException('?????'); */
 
-    if (!verifAlbum) {
-      throw new ConflictException("Cette album n'existe pas");
+    if (test[0].find((elm) => elm.id) === getUser.userId)
+      throw new ConflictException('Vous êtes déjà abonnés à cet album');
+
+    if (
+      test[0].find((elm) => elm.id) === undefined ||
+      test[0].find((elm) => elm.id) !== getUser.userId
+    ) {
+      const upAlbum = this.albumsService.update(+id, updateAlbumDto, getUser);
+      return {
+        statusCode: 201,
+        message: 'Modifications enregistrées.',
+        data: { upAlbum },
+      };
     }
-
-    const upAlbum = this.albumsService.update(+id, updateAlbumDto);
-    return {
-      statusCode: 201,
-      message: 'Modifications enregistrées.',
-      data: { upAlbum },
-    };
   }
 
   @Delete(':id')

@@ -19,6 +19,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags, ApiBody } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GetUser } from 'src/auth/get_user.decorator';
+import User from './entities/user.entity';
 
 @ApiTags('api/users')
 @Controller('api/users')
@@ -45,7 +46,14 @@ export default class UsersController {
       throw new ConflictException(
         'E-mail déjà utilisé, veuillez entrer un e-mail valide',
       );
-
+    const isNomExist = await User.findOne({
+      where: {
+        nom: createUserDto.nom,
+        prenom: createUserDto.prenom,
+        adresse_line1: createUserDto.adresse_line1,
+      },
+    });
+    if (isNomExist) throw new ConflictException('Ce compte existe déjà');
     const hash = await bcrypt.hash(createUserDto.password, saltOrRounds);
 
     const user = await this.usersService.create(createUserDto, hash);
@@ -73,9 +81,9 @@ export default class UsersController {
   async findUser(@GetUser() GetUser) {
     const users = await this.usersService.findOneById(GetUser.userId);
 
-    if (!users) {
+    if (!users)
       throw new NotFoundException('Pas de compte enregistreé pour l instant');
-    }
+
     return users;
   }
 
@@ -107,11 +115,10 @@ export default class UsersController {
 
     const data = await this.usersService.findOneById(userDeleted);
 
-    if (!data) {
-      throw new NotFoundException('Votre compte à déjà été supprimé');
-    }
+    if (!data) throw new NotFoundException('Votre compte à déjà été supprimé');
 
     const userRemoved = await this.usersService.delete(GetUser.userId);
+
     return {
       status: 200,
       message: `Le compte numéro ${data.id} a été supprimé`,

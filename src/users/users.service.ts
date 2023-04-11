@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import User from './entities/user.entity';
+import Album from 'src/albums/entities/album.entity';
 
 @Injectable()
 export default class UsersService {
@@ -29,14 +30,14 @@ export default class UsersService {
 
   async findAll(): Promise<User[]> {
     const users = await User.find({
-      relations: {},
+      relations: { albums: true },
     });
     return users;
   }
 
   async findOneByPseudo(pseudo: string): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: {},
+      relations: { photos: true, invitations: true, albums: true },
       where: { pseudo: pseudo },
     });
 
@@ -49,7 +50,7 @@ export default class UsersService {
 
   async findOneUser(pseudo: string): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: {},
+      relations: { photos: true, invitations: true, albums: true },
       where: { pseudo: pseudo },
     });
 
@@ -58,7 +59,7 @@ export default class UsersService {
 
   async findOneByEmail(email: string): Promise<User | undefined> {
     const userMail = await User.findOne({
-      relations: {},
+      relations: { photos: true, invitations: true, albums: true },
       where: { email: email },
     });
 
@@ -67,7 +68,7 @@ export default class UsersService {
 
   async findOneById(id: number): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: { photos: true, invitations: true },
+      relations: { photos: true, invitations: true, albums: true },
       where: { id: id },
     });
 
@@ -85,7 +86,7 @@ export default class UsersService {
     await User.update(id, updateUserDto);
 
     const newUser = await User.findOne({
-      relations: {},
+      relations: { photos: true, invitations: true, albums: true },
       where: { id: id },
     });
 
@@ -94,7 +95,7 @@ export default class UsersService {
 
   async delete(id: number): Promise<User | undefined> {
     const deleteUser = await User.findOne({
-      relations: {},
+      relations: { photos: true, invitations: true, albums: true },
       where: { id: id },
     });
     User.remove(deleteUser);

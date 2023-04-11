@@ -3,23 +3,25 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import Album from './entities/album.entity';
 import User from 'src/users/entities/user.entity';
+import { GetUser } from 'src/auth/get_user.decorator';
 
 @Injectable()
 export class AlbumsService {
   async create(
     createAlbumDto: CreateAlbumDto,
     user: User,
-  ): Promise<Album | undefined> {
+  ): Promise<Album[] | undefined> {
     const newAlbum = new Album();
     newAlbum.nom_album = createAlbumDto.nom_album;
     newAlbum.user = [user];
     await newAlbum.save();
 
-    return newAlbum;
+    return newAlbum[0];
   }
 
   async findAll(): Promise<Album[] | undefined> {
     const allAlbums = await Album.find();
+
     if (!allAlbums) throw new NotFoundException();
     return allAlbums;
   }
@@ -42,9 +44,12 @@ export class AlbumsService {
   async update(
     id: number,
     updateAlbumDto: UpdateAlbumDto,
+    getUser: User,
   ): Promise<Album | undefined> {
-    await Album.update(id, updateAlbumDto);
-
+    const upAlbum = new Album();
+    upAlbum.user = [getUser];
+    upAlbum.nom_album = updateAlbumDto.nom_album;
+    await Album.save(upAlbum);
     const updateAlbum = await Album.findOneBy({ id });
     return updateAlbum;
   }

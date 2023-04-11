@@ -21,7 +21,7 @@ export class CreateUserDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  /* @MinLength(2, { message: 'veuiller saisir deux caracteres minimum' }) */
+  @MinLength(6, { message: 'veuiller saisir deux caracteres minimum' })
   pseudo: string;
 
   @ApiProperty()
@@ -32,6 +32,7 @@ export class CreateUserDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
+  @MinLength(8)
   password: string;
 
   @ApiProperty()
