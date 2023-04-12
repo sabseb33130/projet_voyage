@@ -9,5 +9,12 @@ export class UpdatePhotoDto extends PartialType(CreatePhotoDto) {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  nom_photo: string;
+  photo: string;
+
+  @ApiProperty()
+  @IsString()
+  information: string;
+
+  @IsOptional()
+  mimeType: string;
 }

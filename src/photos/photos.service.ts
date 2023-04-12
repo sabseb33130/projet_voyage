@@ -10,11 +10,14 @@ export default class PhotosService {
   async create(
     createPhotoDto: CreatePhotoDto,
     user: User,
+    file: Express.Multer.File,
   ): Promise<Photo | undefined> {
     const test = await Album.findOneBy({ id: createPhotoDto.albumId });
     const newPhoto = new Photo();
-    newPhoto.nom_photo = createPhotoDto.nom_photo;
     newPhoto.user = user;
+    newPhoto.photo = file.filename;
+    newPhoto.information = file.originalname;
+    newPhoto.mimeType = file.mimetype;
     newPhoto.albums = [test];
     await Photo.save(newPhoto);
     return newPhoto;
@@ -29,8 +32,8 @@ export default class PhotosService {
     const onePhoto = await Photo.find({ where: { id: id } });
     return onePhoto;
   }
-  async findOneNom(nom_photo: string): Promise<Photo | undefined> {
-    const nomPhoto = await Photo.findOneBy({ nom_photo });
+  async findOneNom(photo: string): Promise<Photo | undefined> {
+    const nomPhoto = await Photo.findOneBy({ photo });
     return nomPhoto;
   }
 

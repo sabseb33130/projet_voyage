@@ -9,6 +9,8 @@ import {
   ParseIntPipe,
   UseGuards,
   ConflictException,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import PhotosService from './photos.service';
 import { CreatePhotoDto } from './dto/create-photo.dto';
@@ -19,6 +21,9 @@ import UsersService from 'src/users/users.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AlbumsService } from 'src/albums/albums.service';
 import { GetUser } from 'src/auth/get_user.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { fileFilter } from './middleware/fileFilter';
+import User from 'src/users/entities/user.entity';
 
 @Controller('api/photos')
 export default class PhotosController {
@@ -30,23 +35,26 @@ export default class PhotosController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Post()
+  @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilter })) //Nom du fichier dans le champs du formulaire HTML et nombre maximum de photos
+  @Post('uploads')
   async create(
+    @UploadedFile() file: Express.Multer.File,
     @Body() createPhotoDto: CreatePhotoDto,
-
     @GetUser() getUser,
   ) {
     const user = await this.usersService.findOneById(getUser.userId);
     const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
     if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
 
-    const newPhoto = await this.photosService.findOneNom(
-      createPhotoDto.nom_photo,
-    );
+    const newPhoto = await this.photosService.findOneNom(file.filename);
     if (newPhoto && verifAlbum)
       throw new ConflictException('Photo déjà enregistrée');
 
-    const photoNew = await this.photosService.create(createPhotoDto, user);
+    const photoNew = await this.photosService.create(
+      createPhotoDto,
+      user,
+      file,
+    );
     return {
       status: 201,
       message: 'Votre photo a été bien ajoutée',

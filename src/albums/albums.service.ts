@@ -10,13 +10,13 @@ export class AlbumsService {
   async create(
     createAlbumDto: CreateAlbumDto,
     user: User,
-  ): Promise<Album[] | undefined> {
+  ): Promise<Album | undefined> {
     const newAlbum = new Album();
     newAlbum.nom_album = createAlbumDto.nom_album;
     newAlbum.user = [user];
-    await newAlbum.save();
+    const albumNew = await Album.save(newAlbum);
 
-    return newAlbum[0];
+    return albumNew;
   }
 
   async findAll(): Promise<Album[] | undefined> {
