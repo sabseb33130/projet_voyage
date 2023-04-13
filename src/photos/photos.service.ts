@@ -12,7 +12,7 @@ export default class PhotosService {
     user: User,
     file: Express.Multer.File,
   ): Promise<Photo | undefined> {
-    const test = await Album.findOneBy({ id: createPhotoDto.albumId });
+    const test = await Album.findOneBy({ id: +createPhotoDto.albumId });
     const newPhoto = new Photo();
     newPhoto.user = user;
     newPhoto.photo = file.filename;
@@ -42,7 +42,9 @@ export default class PhotosService {
     updatePhotoDto: UpdatePhotoDto,
   ): Promise<Photo | undefined> {
     let updatePhoto = new Photo();
-    const photoUp = await Album.find({ where: { id: updatePhotoDto.albumId } });
+    const photoUp = await Album.find({
+      where: { id: +updatePhotoDto.albumId },
+    });
 
     updatePhoto.albums = photoUp;
     await Photo.save(updatePhoto);
