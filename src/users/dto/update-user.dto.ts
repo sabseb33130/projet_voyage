@@ -31,11 +31,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  password: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
   addresse_line1: string;
   @ApiProperty()
   @IsOptional()

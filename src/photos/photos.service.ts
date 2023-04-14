@@ -4,6 +4,7 @@ import { UpdatePhotoDto } from './dto/update-photo.dto';
 import Photo from './entities/photo.entity';
 import User from 'src/users/entities/user.entity';
 import Album from 'src/albums/entities/album.entity';
+import { GetUser } from 'src/auth/get_user.decorator';
 
 @Injectable()
 export default class PhotosService {

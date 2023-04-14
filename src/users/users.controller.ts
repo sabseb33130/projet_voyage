@@ -11,6 +11,8 @@ import {
   Get,
   Delete,
   NotFoundException,
+  ParseIntPipe,
+  Param,
 } from '@nestjs/common';
 import UsersService from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,6 +22,7 @@ import { ApiBearerAuth, ApiTags, ApiBody } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GetUser } from 'src/auth/get_user.decorator';
 import User from './entities/user.entity';
+import { log } from 'console';
 
 @ApiTags('api/users')
 @Controller('api/users')
@@ -31,7 +34,7 @@ export default class UsersController {
   async create(@Body() createUserDto: CreateUserDto) {
     const saltOrRounds = 10;
 
-    const isPseudoExist = await this.usersService.findOneByPseudo(
+    const isPseudoExist = await this.usersService.findOneUser(
       createUserDto.pseudo,
     );
     if (isPseudoExist)
@@ -124,5 +127,34 @@ export default class UsersController {
       message: `Le compte numéro ${data.id} a été supprimé`,
       data: userRemoved,
     };
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('friend/:id')
+  async addFriend(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user,
+  ): Promise<[User, User]> {
+    const friend = await this.usersService.findOneById(id);
+    if (!friend) throw new NotFoundException('Ce user n existe pas.');
+
+    if (id === user.userId)
+      throw new ConflictException(
+        'Vous êtes entrain de vous demandez en amis!!!',
+      );
+    const verif1 = await this.usersService.isfriend(id, user.userId);
+    const verif = await this.usersService.isfriend(user.userId, id);
+
+    if (verif1 === true || verif === true)
+      throw new ConflictException('Vous êtes déjà amis');
+    const updateUser = await this.usersService.postfriend(user.userId, id);
+
+    return [updateUser, user];
+  }
+  @Get('test')
+  async test() {
+    const test = await this.usersService.getAllfriends(1);
+    return test;
   }
 }

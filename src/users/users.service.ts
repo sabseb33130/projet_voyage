@@ -30,27 +30,14 @@ export default class UsersService {
 
   async findAll(): Promise<User[]> {
     const users = await User.find({
-      relations: { albums: true },
+      relations: { invitations: true, albums: true },
     });
     return users;
   }
 
-  async findOneByPseudo(pseudo: string): Promise<User | undefined> {
-    const user = await User.findOne({
-      relations: { photos: true, invitations: true, albums: true },
-      where: { pseudo: pseudo },
-    });
-
-    if (user) {
-      return user;
-    }
-
-    return undefined;
-  }
-
   async findOneUser(pseudo: string): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: { photos: true, invitations: true, albums: true },
+      relations: { invitations: true, albums: true },
       where: { pseudo: pseudo },
     });
 
@@ -59,7 +46,7 @@ export default class UsersService {
 
   async findOneByEmail(email: string): Promise<User | undefined> {
     const userMail = await User.findOne({
-      relations: { photos: true, invitations: true, albums: true },
+      relations: { invitations: true, albums: true },
       where: { email: email },
     });
 
@@ -68,7 +55,7 @@ export default class UsersService {
 
   async findOneById(id: number): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: { photos: true, invitations: true, albums: true },
+      relations: { invitations: true, albums: true },
       where: { id: id },
     });
 
@@ -86,7 +73,7 @@ export default class UsersService {
     await User.update(id, updateUserDto);
 
     const newUser = await User.findOne({
-      relations: { photos: true, invitations: true, albums: true },
+      relations: { invitations: true, albums: true },
       where: { id: id },
     });
 
@@ -100,5 +87,36 @@ export default class UsersService {
     });
     User.remove(deleteUser);
     return deleteUser;
+  }
+
+  async postfriend(id: number, friendId: number): Promise<User | undefined> {
+    const user = await User.findOne({
+      where: { id },
+      relations: { friends: true },
+    });
+    const addFriend = await User.findOneBy({ id: friendId });
+
+    user.friends?.push(addFriend);
+
+    const newUser = await user.save();
+    return newUser;
+  }
+  async getAllfriends(id: number) {
+    const users = await User.find({ where: { users: { id } } });
+  }
+  async isfriend(idInvit: number, friendId: number): Promise<boolean> {
+    const friend = await User.find({
+      where: { id: friendId },
+      relations: { friends: true },
+    });
+
+    const test = friend
+      .map((data) => data.friends.map((dato) => dato.id))
+      .toString()
+      .includes(idInvit.toString());
+
+    const status = test === true ? true : false;
+
+    return status;
   }
 }
