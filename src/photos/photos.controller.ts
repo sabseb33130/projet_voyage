@@ -92,11 +92,6 @@ export default class PhotosController {
   ): Promise<StreamableFile> {
     const photo = await this.photosService.findOne(id); //Permet de trouver ma photo
     const filePhoto = photo.map((data) => data.photo); //permet d'utiliser le nom du fichier blob dans mon dossier Uploads de mon back
-    res.set({
-      /* 'Content-Type': 'image/png',
-        'Content-Disposition': `attachment; filename="${filePhoto}.blob"`, */
-    });
-    /*  const mimeType = photo.map((dato) => dato.mimeType.toString()); */ //test
 
     const file = createReadStream(join(process.cwd(), `uploads/${filePhoto}`)); //Permet de créer le chemin du d'accès du fichier .
     const result = new StreamableFile(file); //renvoi le fichier pour l'utiliser
