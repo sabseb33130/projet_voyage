@@ -6,7 +6,6 @@ import {
   ClassSerializerInterceptor,
   UseGuards,
   Patch,
-  Request,
   ConflictException,
   Get,
   Delete,
@@ -22,7 +21,6 @@ import { ApiBearerAuth, ApiTags, ApiBody } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GetUser } from 'src/auth/get_user.decorator';
 import User from './entities/user.entity';
-import { log } from 'console';
 
 @ApiTags('api/users')
 @Controller('api/users')
@@ -81,8 +79,8 @@ export default class UsersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('/compteperso')
-  async findUser(@GetUser() GetUser) {
-    const users = await this.usersService.findOneById(GetUser.userId);
+  async findUser(@GetUser() user) {
+    const users = await this.usersService.findOneById(user.userId);
 
     if (!users)
       throw new NotFoundException('Pas de compte enregistreé pour l instant');
@@ -93,8 +91,8 @@ export default class UsersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Patch()
-  async update(@Body() updateUserDto: UpdateUserDto, @GetUser() GetUser) {
-    const userLogged = GetUser.userId;
+  async update(@Body() updateUserDto: UpdateUserDto, @GetUser() user) {
+    const userLogged = user.userId;
 
     const userUpdate = await this.usersService.update(
       userLogged,
@@ -113,14 +111,14 @@ export default class UsersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete()
-  async removeUser(@GetUser() GetUser) {
-    const userDeleted: number = GetUser.userId;
+  async removeUser(@GetUser() user) {
+    const userDeleted: number = user.userId;
 
     const data = await this.usersService.findOneById(userDeleted);
 
     if (!data) throw new NotFoundException('Votre compte à déjà été supprimé');
 
-    const userRemoved = await this.usersService.delete(GetUser.userId);
+    const userRemoved = await this.usersService.delete(user.userId);
 
     return {
       status: 200,

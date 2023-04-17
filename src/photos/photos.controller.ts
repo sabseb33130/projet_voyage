@@ -11,6 +11,8 @@ import {
   ConflictException,
   UseInterceptors,
   UploadedFile,
+  Res,
+  StreamableFile,
 } from '@nestjs/common';
 import PhotosService from './photos.service';
 import { CreatePhotoDto } from './dto/create-photo.dto';
@@ -23,7 +25,9 @@ import { AlbumsService } from 'src/albums/albums.service';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileFilter } from './middleware/fileFilter';
-import User from 'src/users/entities/user.entity';
+import type { Response } from 'express';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 @Controller('api/photos')
 export default class PhotosController {
@@ -40,9 +44,9 @@ export default class PhotosController {
   async create(
     @UploadedFile() file: Express.Multer.File,
     @Body() createPhotoDto: CreatePhotoDto,
-    @GetUser() getUser,
+    @GetUser() user,
   ) {
-    const user = await this.usersService.findOneById(getUser.userId);
+    const userOne = await this.usersService.findOneById(user.UserId);
     const verifAlbum = await this.albumsService.findOne(
       +createPhotoDto.albumId,
     );
@@ -55,7 +59,7 @@ export default class PhotosController {
 
     const photoNew = await this.photosService.create(
       createPhotoDto,
-      user,
+      userOne,
       file,
     );
     return {
@@ -71,13 +75,36 @@ export default class PhotosController {
     if (!allPhoto) {
       throw new NotFoundException('Pas de photo encore enregistrée');
     }
+    console.log(allPhoto);
+
     return {
       status: 200,
       message: 'Voici toutes les photos enregistrées',
       data: allPhoto,
     };
   }
+  /*  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard) */
+  @Get('file/:id')
+  async getFile(
+    @Param('id', ParseIntPipe) id: number,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const photo = await this.photosService.findOne(id); //Permet de trouver ma photo
+    const filePhoto = photo.map((data) => data.photo); //permet d'utiliser le nom du fichier blob dans mon dossier Uploads de mon back
+    res.set({
+      /* 'Content-Type': 'image/png',
+        'Content-Disposition': `attachment; filename="${filePhoto}.blob"`, */
+    });
+    /*  const mimeType = photo.map((dato) => dato.mimeType.toString()); */ //test
 
+    const file = createReadStream(join(process.cwd(), `uploads/${filePhoto}`)); //Permet de créer le chemin du d'accès du fichier .
+    const result = new StreamableFile(file); //renvoi le fichier pour l'utiliser
+
+    return result;
+  }
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const photoId = await this.photosService.findOne(id);
@@ -90,7 +117,8 @@ export default class PhotosController {
       data: photoId,
     };
   }
-
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
