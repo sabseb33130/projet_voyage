@@ -19,7 +19,6 @@ import Album from './entities/album.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GetUser } from 'src/auth/get_user.decorator';
 import UsersService from 'src/users/users.service';
-import { log } from 'console';
 import User from 'src/users/entities/user.entity';
 @UseGuards(JwtAuthGuard)
 @ApiTags('albums')
@@ -32,17 +31,17 @@ export class AlbumsController {
   ) {}
 
   @Post()
-  async create(@Body() createAlbumDto: CreateAlbumDto, @GetUser() getUser) {
-    const user = await this.usersService.findOneById(getUser.userId);
+  async create(@Body() createAlbumDto: CreateAlbumDto, @GetUser() user) {
+    const user1 = await this.usersService.findOneById(user.user.id);
     const verifAlbum = await this.albumsService.findOneNom(
       createAlbumDto.nom_album,
     );
 
     console.log(verifAlbum);
-    if (verifAlbum && getUser.userId == verifAlbum.id) {
+    if (verifAlbum && user.user.id == verifAlbum.id) {
       throw new ConflictException('Album déjà créé ');
     }
-    const albumNew = this.albumsService.create(createAlbumDto, user);
+    const albumNew = this.albumsService.create(createAlbumDto, user1);
     return {
       statusCode: 201,
       message: 'Nouvel album créé',
@@ -73,22 +72,22 @@ export class AlbumsController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAlbumDto: UpdateAlbumDto,
-    @GetUser() getUser,
+    @GetUser() user,
   ) {
-    const verifUser = await User.find({ where: { id: getUser.userId } });
+    const verifUser = await User.find({ where: { id: user.user.id } });
     const test = verifUser.map((data, i) => data.albums);
     //en cours verif que le user n'est pas déjà abonné a cet album
     /*    if (test[0].find((elm) => elm.id) === undefined)
       throw new NotFoundException('?????'); */
 
-    if (test[0].find((elm) => elm.id) === getUser.userId)
+    if (test[0].find((elm) => elm.id) === user.user.id)
       throw new ConflictException('Vous êtes déjà abonnés à cet album');
 
     if (
       test[0].find((elm) => elm.id) === undefined ||
-      test[0].find((elm) => elm.id) !== getUser.userId
+      test[0].find((elm) => elm.id) !== user.user.id
     ) {
-      const upAlbum = this.albumsService.update(+id, updateAlbumDto, getUser);
+      const upAlbum = this.albumsService.update(+id, updateAlbumDto, user);
       return {
         statusCode: 201,
         message: 'Modifications enregistrées.',

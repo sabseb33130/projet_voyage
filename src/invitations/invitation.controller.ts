@@ -28,7 +28,7 @@ export default class InvitationsController {
   @Post()
   async create(
     @Body() createInvitationsDto: CreateInvitationsDto,
-    @GetUser() getUser,
+    @GetUser() user,
   ) {
     const newInvitations = await this.invitationsService.findOneInvit(
       createInvitationsDto.invitation,
@@ -38,7 +38,7 @@ export default class InvitationsController {
     }
     const InvitationsNew = await this.invitationsService.create(
       createInvitationsDto,
-      getUser.userId,
+      user.user.id,
     );
 
     return {

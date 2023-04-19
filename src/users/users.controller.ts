@@ -139,7 +139,7 @@ export default class UsersController {
 
     if (id === user.userId)
       throw new ConflictException(
-        'Vous êtes entrain de vous demandez en amis!!!',
+        'Vous êtes entrain de vous demandez en ami!!!',
       );
     const verif1 = await this.usersService.isfriend(id, user.userId);
     const verif = await this.usersService.isfriend(user.userId, id);

@@ -13,6 +13,8 @@ import { AuthModule } from './auth/auth.module';
 
 import Invitations from './invitations/entities/invitations.entity';
 import { InvitationsModule } from './invitations/invitations.module';
+import { PhotoIdentiteModule } from './photo-identite/photo-identite.module';
+import { PhotoIdentite } from './photo-identite/entities/photo-identite.entity';
 
 @Module({
   imports: [
@@ -26,7 +28,7 @@ import { InvitationsModule } from './invitations/invitations.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Invitations, Photo, Album],
+      entities: [User, Invitations, Photo, Album, PhotoIdentite],
       autoLoadEntities: true,
       synchronize: true,
       logging: false,
@@ -36,6 +38,7 @@ import { InvitationsModule } from './invitations/invitations.module';
     PhotosModule,
     AlbumsModule,
     AuthModule,
+    PhotoIdentiteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

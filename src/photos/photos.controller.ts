@@ -46,12 +46,11 @@ export default class PhotosController {
     @Body() createPhotoDto: CreatePhotoDto,
     @GetUser() user,
   ) {
-    const userOne = await this.usersService.findOneById(user.UserId);
+    const userOne = await this.usersService.findOneById(user.user.id);
     const verifAlbum = await this.albumsService.findOne(
       +createPhotoDto.albumId,
     );
     if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
-    console.log(file.originalname);
 
     const newPhoto = await this.photosService.findOneNom(file.originalname);
     if (newPhoto && verifAlbum)
@@ -75,7 +74,6 @@ export default class PhotosController {
     if (!allPhoto) {
       throw new NotFoundException('Pas de photo encore enregistrée');
     }
-    console.log(allPhoto);
 
     return {
       status: 200,
@@ -83,8 +81,8 @@ export default class PhotosController {
       data: allPhoto,
     };
   }
-  /*  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard) */
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get('file/:id')
   async getFile(
     @Param('id', ParseIntPipe) id: number,

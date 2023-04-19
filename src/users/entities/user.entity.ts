@@ -2,14 +2,17 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import Album from 'src/albums/entities/album.entity';
 import Invitations from 'src/invitations/entities/invitations.entity';
+import { PhotoIdentite } from 'src/photo-identite/entities/photo-identite.entity';
 import Photo from 'src/photos/entities/photo.entity';
 import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
@@ -79,4 +82,7 @@ export default class User extends BaseEntity {
   @ManyToMany(() => User, (user) => user.users)
   @JoinTable()
   friends: User[];
+  @OneToOne(() => PhotoIdentite, (photoIdentite) => photoIdentite.user)
+  @JoinColumn()
+  photoIdentites: PhotoIdentite;
 }
