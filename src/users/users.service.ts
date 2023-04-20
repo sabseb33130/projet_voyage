@@ -110,10 +110,7 @@ export default class UsersService {
       relations: { friends: true },
     });
 
-    const test = friend
-      .map((data) => data.friends.map((dato) => dato.id))
-      .toString()
-      .includes(idInvit.toString());
+    const test = friend.toString().includes(idInvit.toString());
 
     const status = test === true ? true : false;
 

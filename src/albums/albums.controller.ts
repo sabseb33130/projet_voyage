@@ -32,13 +32,19 @@ export class AlbumsController {
 
   @Post()
   async create(@Body() createAlbumDto: CreateAlbumDto, @GetUser() user) {
-    const user1 = await this.usersService.findOneById(user.user.id);
+    const user1 = await this.usersService.findOneById(user.userId);
     const verifAlbum = await this.albumsService.findOneNom(
       createAlbumDto.nom_album,
     );
+    const albumDate = await this.albumsService.findOneDate(createAlbumDto.date);
+    console.log('user', user);
 
-    console.log(verifAlbum);
-    if (verifAlbum && user.user.id == verifAlbum.id) {
+    console.log('compte', verifAlbum);
+    if (
+      (verifAlbum && user.userId == verifAlbum.id) ||
+      verifAlbum ||
+      (albumDate && verifAlbum)
+    ) {
       throw new ConflictException('Album déjà créé ');
     }
     const albumNew = this.albumsService.create(createAlbumDto, user1);
@@ -74,18 +80,18 @@ export class AlbumsController {
     @Body() updateAlbumDto: UpdateAlbumDto,
     @GetUser() user,
   ) {
-    const verifUser = await User.find({ where: { id: user.user.id } });
+    const verifUser = await User.find({ where: { id: user.userId } });
     const test = verifUser.map((data, i) => data.albums);
     //en cours verif que le user n'est pas déjà abonné a cet album
     /*    if (test[0].find((elm) => elm.id) === undefined)
       throw new NotFoundException('?????'); */
 
-    if (test[0].find((elm) => elm.id) === user.user.id)
+    if (test[0].find((elm) => elm.id) === user.userId)
       throw new ConflictException('Vous êtes déjà abonnés à cet album');
 
     if (
       test[0].find((elm) => elm.id) === undefined ||
-      test[0].find((elm) => elm.id) !== user.user.id
+      test[0].find((elm) => elm.id) !== user.userId
     ) {
       const upAlbum = this.albumsService.update(+id, updateAlbumDto, user);
       return {

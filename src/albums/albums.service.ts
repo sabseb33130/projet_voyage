@@ -33,7 +33,13 @@ export class AlbumsService {
     }
     return undefined;
   }
-
+  async findOneDate(date: string): Promise<Album | undefined> {
+    const oneDate = await Album.findOneBy({ date: date });
+    if (date) {
+      return oneDate;
+    }
+    return undefined;
+  }
   async findOne(id: number): Promise<Album | undefined> {
     const oneAlbum = await Album.findOneBy({ id });
     if (oneAlbum) {

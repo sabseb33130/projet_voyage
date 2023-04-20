@@ -21,6 +21,7 @@ export default class Album extends BaseEntity {
   date: string;
   @ManyToMany(() => Photo, (photo) => photo.albums, {
     eager: true,
+    cascade: true,
   })
   @JoinTable()
   photos: Photo[];
