@@ -31,7 +31,7 @@ import { PhotoIdentite } from './photo-identite/entities/photo-identite.entity';
       entities: [User, Invitations, Photo, Album, PhotoIdentite],
       autoLoadEntities: true,
       synchronize: true,
-      logging: false,
+      logging: true,
     }),
     UsersModule,
     InvitationsModule,

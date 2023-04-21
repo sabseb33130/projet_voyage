@@ -58,7 +58,7 @@ export default class User extends BaseEntity {
   ville: string;
 
   @ApiProperty()
-  @Column({ type: 'integer' })
+  @Column({ type: 'varchar', nullable: true })
   codepostal: string;
 
   @ApiProperty()
@@ -70,6 +70,7 @@ export default class User extends BaseEntity {
   @OneToMany(() => Photo, (photo) => photo.user, { cascade: true })
   photos: Photo[];
   @ManyToMany(() => Album, (album) => album.user, {
+    eager: true,
     cascade: true,
   })
   @JoinTable()

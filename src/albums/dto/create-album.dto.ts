@@ -15,4 +15,8 @@ export class CreateAlbumDto {
   @IsOptional()
   @IsDateString()
   date: string;
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  description: string;
 }

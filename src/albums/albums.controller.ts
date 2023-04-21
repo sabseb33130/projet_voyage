@@ -37,16 +37,15 @@ export class AlbumsController {
       createAlbumDto.nom_album,
     );
     const albumDate = await this.albumsService.findOneDate(createAlbumDto.date);
-    console.log('user', user);
 
-    console.log('compte', verifAlbum);
-    if (
-      (verifAlbum && user.userId == verifAlbum.id) ||
-      verifAlbum ||
-      (albumDate && verifAlbum)
-    ) {
-      throw new ConflictException('Album déjà créé ');
-    }
+    const test = verifAlbum.find(
+      (elm) => elm.nom_album === createAlbumDto.nom_album,
+    );
+    console.log('test', test);
+    console.log(albumDate);
+
+    if (test && user.userId) throw new ConflictException('Album déjà créé ');
+
     const albumNew = this.albumsService.create(createAlbumDto, user1);
     return {
       statusCode: 201,

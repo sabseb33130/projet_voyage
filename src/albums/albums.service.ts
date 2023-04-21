@@ -14,6 +14,7 @@ export class AlbumsService {
     const newAlbum = new Album();
     newAlbum.nom_album = createAlbumDto.nom_album;
     newAlbum.date = createAlbumDto.date;
+    newAlbum.description = createAlbumDto.description;
     newAlbum.user = [user];
     const albumNew = await Album.save(newAlbum);
 
@@ -26,8 +27,13 @@ export class AlbumsService {
     if (!allAlbums) throw new NotFoundException();
     return allAlbums;
   }
-  async findOneNom(nom_album: string): Promise<Album | undefined> {
-    const oneNom = await Album.findOneBy({ nom_album: nom_album });
+  async findOneNom(nom_album: string): Promise<Album[] | undefined> {
+    const oneNom = await Album.find({
+      where: {
+        nom_album: nom_album,
+      },
+      relations: { user: true },
+    });
     if (oneNom) {
       return oneNom;
     }

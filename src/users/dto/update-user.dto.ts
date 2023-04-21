@@ -44,7 +44,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
   @ApiProperty()
   @IsOptional()
-  @IsPostalCode('any')
   codepostal: string;
 
   @ApiProperty()

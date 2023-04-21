@@ -19,6 +19,8 @@ export default class Album extends BaseEntity {
   nom_album: string;
   @Column({ type: 'date' })
   date: string;
+  @Column({ nullable: true })
+  description: string;
   @ManyToMany(() => Photo, (photo) => photo.albums, {
     eager: true,
     cascade: true,

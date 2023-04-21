@@ -7,10 +7,11 @@ export class UpdateAlbumDto extends PartialType(CreateAlbumDto) {
   @IsString()
   @IsOptional()
   nom_album?: string;
-  /* @ApiProperty()
-  @IsNumber()
+  @ApiProperty()
+  @IsString()
   @IsOptional()
-  photoId: number; */
+  description?: string;
+
   @ApiProperty()
   @IsOptional()
   userId?: number;

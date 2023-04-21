@@ -55,7 +55,6 @@ export class CreateUserDto {
   pays: string;
 
   @ApiProperty()
-  @IsPostalCode('any')
   @IsNotEmpty()
   codepostal: string;
 
