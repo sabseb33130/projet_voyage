@@ -41,12 +41,11 @@ export class AlbumsController {
     const test = verifAlbum.find(
       (elm) => elm.nom_album === createAlbumDto.nom_album,
     );
-    console.log('test', test);
-    console.log(albumDate);
 
     if (test && user.userId) throw new ConflictException('Album déjà créé ');
 
-    const albumNew = this.albumsService.create(createAlbumDto, user1);
+    const albumNew = await this.albumsService.create(createAlbumDto, user1);
+
     return {
       statusCode: 201,
       message: 'Nouvel album créé',
@@ -79,6 +78,8 @@ export class AlbumsController {
     @Body() updateAlbumDto: UpdateAlbumDto,
     @GetUser() user,
   ) {
+    const user1 = await this.usersService.findOneById(user.userId);
+
     const verifUser = await User.find({ where: { id: user.userId } });
     const test = verifUser.map((data, i) => data.albums);
     //en cours verif que le user n'est pas déjà abonné a cet album
@@ -92,11 +93,19 @@ export class AlbumsController {
       test[0].find((elm) => elm.id) === undefined ||
       test[0].find((elm) => elm.id) !== user.userId
     ) {
-      const upAlbum = this.albumsService.update(+id, updateAlbumDto, user);
+      const upAlbum = await this.albumsService.update(
+        +id,
+        updateAlbumDto,
+        user1,
+      );
+      const returnAlbum = await this.albumsService.findOne(+id);
+      /*  console.log('find', returnAlbum);
+      console.log('update', upAlbum); */
+
       return {
         statusCode: 201,
         message: 'Modifications enregistrées.',
-        data: { upAlbum },
+        data: upAlbum,
       };
     }
   }
@@ -108,7 +117,6 @@ export class AlbumsController {
       throw new NotFoundException(`L'album n'existe pas ou est déjà supprimé`);
     }
     const removedAlbum = await this.albumsService.delete(id);
-
     return {
       status: 200,
       message: `Le compte numéro ${id} a été supprimé`,

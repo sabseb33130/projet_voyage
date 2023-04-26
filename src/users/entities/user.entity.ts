@@ -67,6 +67,9 @@ export default class User extends BaseEntity {
   @ApiProperty()
   @Column({ type: 'varchar' })
   pays: string;
+  @ApiProperty()
+  @Column({ type: 'varchar', nullable: true })
+  photo1: string;
   @OneToMany(() => Photo, (photo) => photo.user, { cascade: true })
   photos: Photo[];
   @ManyToMany(() => Album, (album) => album.user, {

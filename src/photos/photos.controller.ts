@@ -46,7 +46,7 @@ export default class PhotosController {
     @Body() createPhotoDto: CreatePhotoDto,
     @GetUser() user,
   ) {
-    const userOne = await this.usersService.findOneById(user.user.id);
+    const userOne = await this.usersService.findOneById(user.userId);
     const verifAlbum = await this.albumsService.findOne(
       +createPhotoDto.albumId,
     );

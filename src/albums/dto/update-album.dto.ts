@@ -1,18 +1,25 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsDateString,
+} from 'class-validator';
 import { CreateAlbumDto } from './create-album.dto';
 
 export class UpdateAlbumDto extends PartialType(CreateAlbumDto) {
   @ApiProperty()
-  @IsString()
   @IsOptional()
-  nom_album?: string;
+  nom_album: string;
   @ApiProperty()
-  @IsString()
   @IsOptional()
-  description?: string;
+  date: string;
+  @ApiProperty()
+  @IsOptional()
+  description: string;
 
   @ApiProperty()
   @IsOptional()
-  userId?: number;
+  userId: number;
 }

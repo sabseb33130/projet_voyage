@@ -55,6 +55,7 @@ export class CreateUserDto {
   pays: string;
 
   @ApiProperty()
+  @IsPostalCode('FR')
   @IsNotEmpty()
   codepostal: string;
 
@@ -62,4 +63,7 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   departement: string;
+  @ApiProperty()
+  @IsString()
+  photo1: string;
 }

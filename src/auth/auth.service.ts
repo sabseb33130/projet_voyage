@@ -25,7 +25,7 @@ export class AuthService {
     return null;
   }
   async login(user: User) {
-    const payload = { pseudo: user.pseudo, sub: user.id };
+    const payload = { username: user.pseudo, sub: user.id };
 
     return {
       status: 201,

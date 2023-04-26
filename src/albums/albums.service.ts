@@ -39,14 +39,14 @@ export class AlbumsService {
     }
     return undefined;
   }
-  async findOneDate(date: string): Promise<Album | undefined> {
+  async findOneDate(date: string) {
     const oneDate = await Album.findOneBy({ date: date });
     if (date) {
       return oneDate;
     }
     return undefined;
   }
-  async findOne(id: number): Promise<Album | undefined> {
+  async findOne(id: number) {
     const oneAlbum = await Album.findOneBy({ id });
     if (oneAlbum) {
       return oneAlbum;
@@ -59,12 +59,15 @@ export class AlbumsService {
     updateAlbumDto: UpdateAlbumDto,
     getUser: User,
   ): Promise<Album | undefined> {
-    const upAlbum = new Album();
-    upAlbum.user = [getUser];
-    upAlbum.nom_album = updateAlbumDto.nom_album;
-    upAlbum.date = updateAlbumDto.date;
-    await Album.save(upAlbum);
+    console.log(getUser);
+
     const updateAlbum = await Album.findOneBy({ id });
+    // updateAlbum.user = updateAlbum.user.push(getUser);
+    updateAlbum.nom_album = updateAlbumDto.nom_album;
+    updateAlbum.date = updateAlbumDto.date;
+    updateAlbum.description = updateAlbumDto.description;
+    await updateAlbum.save();
+
     return updateAlbum;
   }
 
