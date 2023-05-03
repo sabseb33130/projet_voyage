@@ -1,33 +1,29 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  NotFoundException,
+  Param,
   ParseIntPipe,
-  UseGuards,
-  ConflictException,
-  UseInterceptors,
-  UploadedFile,
+  Post,
   Res,
-  StreamableFile,
+  UploadedFile,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import PhotosService from './photos.service';
-import { CreatePhotoDto } from './dto/create-photo.dto';
-import { UpdatePhotoDto } from './dto/update-photo.dto';
-import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
+
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import UsersService from 'src/users/users.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
 import { AlbumsService } from 'src/albums/albums.service';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { editFileName, fileFilter } from './middleware/fileFilter';
 import { GetUser } from 'src/auth/get_user.decorator';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { fileFilter } from './middleware/fileFilter';
-import type { Response } from 'express';
-import { createReadStream } from 'fs';
-import { join } from 'path';
+import { CreatePhotoDto } from './dto/create-photo.dto';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('api/photos')
 export default class PhotosController {
@@ -37,7 +33,72 @@ export default class PhotosController {
     private readonly albumsService: AlbumsService,
   ) {}
 
-  @ApiBearerAuth()
+  //test
+  //FileInterceptor prend 2 arguments, un fieldname et un objet d'options facultatif(vérif les types de fichiers corrects et donner un nom perso dans le répertoire)
+  //fonction utilisable avec multer retourne un moteur de stockage implémenté pour stocker les photos en local.
+
+  @UseGuards(JwtAuthGuard)
+  @Post('uploads')
+  @UseInterceptors(
+    FilesInterceptor('monimage', 8, {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: editFileName,
+      }),
+      fileFilter: fileFilter,
+    }),
+  )
+  async addNewImage(
+    @Body() createPhotoDto: CreatePhotoDto,
+    @GetUser() user,
+    @UploadedFiles() savedFiles: Array<Express.Multer.File>,
+  ) {
+    console.log('coucou', savedFiles);
+
+    const userOne = await this.usersService.findOneById(user.userId);
+    const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
+    let view;
+    if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
+    // files.forEach(async (file) => {
+    view = await this.photosService.create(userOne, savedFiles, createPhotoDto);
+    //  });
+
+    /*    console.log('user', userOne);
+    console.log('album', verifAlbum); */
+    console.log('photo', savedFiles);
+
+    return {
+      statusCode: 201,
+      message: 'Votre photo a bien été ajoutée',
+      data: view,
+    };
+  }
+  @Get(':imgpath')
+  async seeUploadedFile(@Param('imgpath') file, @Res() res) {
+    return res.sendFile(file, { root: './uploads' });
+  }
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  @ApiOperation({ summary: "Suppression d'une photo " })
+  @ApiResponse({ status: 200, description: 'Photo supprimée avec succès' })
+  async removeImage(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() albumId: number,
+  ) {
+    const response = await this.photosService.findOne(id);
+    const album = await this.albumsService.findOne(albumId);
+    if (album)
+      if (!response) {
+        throw new NotFoundException("Cette photo n'existe pas ou plus");
+      }
+    await this.photosService.remove(id);
+    return {
+      status: 200,
+      message: `Votre photo a bien été supprimée`,
+      data: response,
+    };
+  }
+  /*  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilter })) //Nom du fichier dans le champs du formulaire HTML et nombre maximum de photos
   @Post('uploads')
@@ -61,6 +122,8 @@ export default class PhotosController {
       userOne,
       file,
     );
+    console.log(photoNew);
+
     return {
       status: 201,
       message: 'Votre photo a été bien ajoutée',
@@ -81,21 +144,28 @@ export default class PhotosController {
       data: allPhoto,
     };
   }
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  /*  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard) 
   @Get('file/:id')
   async getFile(
     @Param('id', ParseIntPipe) id: number,
     @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
     const photo = await this.photosService.findOne(id); //Permet de trouver ma photo
-    const filePhoto = photo.map((data) => data.photo); //permet d'utiliser le nom du fichier blob dans mon dossier Uploads de mon back
+    const filePhoto = photo.photo; //me permet de récupérer la référence du blob
 
-    const file = createReadStream(join(process.cwd(), `uploads/${filePhoto}`)); //Permet de créer le chemin du d'accès du fichier .
-    const result = new StreamableFile(file); //renvoi le fichier pour l'utiliser
+    const file = createReadStream(join(process.cwd(), `uploads/${filePhoto}`)); //permet de rendre le blob lisible.
+    console.log(join(process.cwd(), `uploads/${filePhoto}`));
+    res.set({
+      'Content-Type': 'image/png',
+      // 'Content-Disposition': `attachment; filename= "${file}"`,
+    }); //typage du header
+
+    const result = new StreamableFile(file);
 
     return result;
   }
+
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get(':id')
@@ -104,11 +174,9 @@ export default class PhotosController {
     if (!photoId) {
       throw new NotFoundException("La photo recherchée n'existe pas.");
     }
-    return {
-      status: 200,
+    return photoId   status: 200,
       message: 'Voici la photo enregistrée',
-      data: photoId,
-    };
+      data: ;
   }
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -146,5 +214,5 @@ export default class PhotosController {
       message: `Cette photo vient d'être supprimée`,
       data: photoDel,
     };
-  }
+  } */
 }

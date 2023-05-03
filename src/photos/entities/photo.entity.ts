@@ -15,14 +15,20 @@ import {
 export default class Photo extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column({ type: 'varchar' })
-  photo: string;
 
-  @Column()
-  information: string;
+  //test
+  @ApiProperty()
+  @Column({
+    nullable: true,
+  })
+  originalName: string;
 
-  @Column()
-  mimeType: string;
+  @ApiProperty()
+  @Column({
+    nullable: true,
+  })
+  file: string;
+  //
 
   @ManyToMany(() => Album, (album) => album.photos)
   albums: Album[];

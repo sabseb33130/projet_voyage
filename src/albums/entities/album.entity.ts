@@ -18,7 +18,9 @@ export default class Album extends BaseEntity {
   @Column({ type: 'varchar', length: 50 })
   nom_album: string;
   @Column({ type: 'date', nullable: true })
-  date: string;
+  date_debut: string;
+  @Column({ type: 'varchar', nullable: true })
+  date_fin: string;
   @Column({ type: 'varchar', nullable: true })
   description: string;
   @ManyToMany(() => Photo, (photo) => photo.albums, {

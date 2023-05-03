@@ -36,7 +36,9 @@ export class AlbumsController {
     const verifAlbum = await this.albumsService.findOneNom(
       createAlbumDto.nom_album,
     );
-    const albumDate = await this.albumsService.findOneDate(createAlbumDto.date);
+    const albumDate = await this.albumsService.findOneDate(
+      createAlbumDto.date_debut,
+    );
 
     const test = verifAlbum.find(
       (elm) => elm.nom_album === createAlbumDto.nom_album,
@@ -119,7 +121,7 @@ export class AlbumsController {
     const removedAlbum = await this.albumsService.delete(id);
     return {
       status: 200,
-      message: `Le compte numéro ${id} a été supprimé`,
+      message: `L'album ${removedAlbum.nom_album} dont le numéro est ${id} a été supprimé`,
       data: removedAlbum,
     };
   }

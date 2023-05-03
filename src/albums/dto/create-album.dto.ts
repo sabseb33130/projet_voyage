@@ -14,7 +14,11 @@ export class CreateAlbumDto {
   @ApiProperty()
   @IsOptional()
   @IsDateString()
-  date: string;
+  date_debut: string;
+  @ApiProperty()
+  @IsOptional()
+  @IsDateString()
+  date_fin: string;
   @ApiProperty()
   @IsOptional()
   @IsString()

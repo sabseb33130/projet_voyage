@@ -4,11 +4,10 @@ import { UpdatePhotoDto } from './dto/update-photo.dto';
 import Photo from './entities/photo.entity';
 import User from 'src/users/entities/user.entity';
 import Album from 'src/albums/entities/album.entity';
-import { GetUser } from 'src/auth/get_user.decorator';
 
 @Injectable()
 export default class PhotosService {
-  async create(
+  /*   async create(
     createPhotoDto: CreatePhotoDto,
     user: User,
     file: Express.Multer.File,
@@ -26,12 +25,14 @@ export default class PhotosService {
 
   async findAll(): Promise<Photo[] | undefined> {
     const allPhoto = await Photo.find();
+
     return allPhoto;
   }
 
-  async findOne(id: number): Promise<Photo[] | undefined> {
+  async findOne(id: number): Promise<Photo | undefined> {
     const onePhoto = await Photo.find({ where: { id: id } });
-    return onePhoto;
+
+    return onePhoto[0];
   }
   async findOneNom(photo: string): Promise<Photo | undefined> {
     const nomPhoto = await Photo.findOneBy({ photo });
@@ -57,5 +58,52 @@ export default class PhotosService {
     const delPhoto = await Photo.findBy({ id });
     await Photo.remove(delPhoto);
     return delPhoto;
+  } */
+
+  //test
+  async create(
+    user: User,
+    files: Array<Express.Multer.File>,
+    createPhotoDto: CreatePhotoDto,
+  ): Promise<Photo | undefined> {
+    const album = await Album.findOneBy({ id: +createPhotoDto.albumId });
+    console.log('file', files);
+
+    const newPhoto = new Photo();
+    newPhoto.user = user;
+    newPhoto.file = files[0].filename;
+    newPhoto.originalName = files[0].originalname;
+    newPhoto.albums = [album];
+    await Photo.save(newPhoto);
+    console.log('ajout photo', newPhoto);
+
+    return newPhoto;
+  }
+  async findAll(): Promise<Photo[] | undefined> {
+    const allPhoto = await Photo.find();
+
+    return allPhoto;
+  }
+
+  async findOne(id: number): Promise<Photo | undefined> {
+    const onePhoto = await Photo.find({ where: { id: id } });
+
+    return onePhoto[0];
+  }
+  async findOneNom(photo: string): Promise<Photo | undefined> {
+    const nomPhoto = await Photo.findOneBy({ originalName: photo });
+    return nomPhoto;
+  }
+  /**
+   * @method deleteImage :
+   * * Methode permettant de supprimer une image de son topic.
+   */
+  async remove(id: number) {
+    const deletedImage = await Photo.findOneBy({ id });
+    deletedImage.remove();
+    if (deletedImage) {
+      return deletedImage;
+    }
+    return undefined;
   }
 }

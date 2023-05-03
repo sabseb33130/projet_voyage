@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 
@@ -21,7 +20,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Controller('api/Invitationss')
+@Controller('api/Invitations')
 export default class InvitationsController {
   constructor(private readonly invitationsService: InvitationsService) {}
   @ApiBody({ type: CreateInvitationsDto })
@@ -38,7 +37,7 @@ export default class InvitationsController {
     }
     const InvitationsNew = await this.invitationsService.create(
       createInvitationsDto,
-      user.user.id,
+      user.userId,
     );
 
     return {

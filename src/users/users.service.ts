@@ -22,7 +22,6 @@ export default class UsersService {
     newUser.codepostal = createUserDto.codepostal;
     newUser.departement = createUserDto.departement;
     newUser.pays = createUserDto.pays;
-
     await newUser.save();
 
     return newUser;
@@ -30,14 +29,24 @@ export default class UsersService {
 
   async findAll(): Promise<User[]> {
     const users = await User.find({
-      relations: { invitations: true, albums: true },
+      relations: {
+        photos: true,
+        invitations: true,
+        albums: true,
+        friends: true,
+      },
     });
     return users;
   }
 
   async findOneUser(pseudo: string): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: { invitations: true, albums: true },
+      relations: {
+        photos: true,
+        invitations: true,
+        albums: true,
+        friends: true,
+      },
       where: { pseudo: pseudo },
     });
 
@@ -46,7 +55,12 @@ export default class UsersService {
 
   async findOneByEmail(email: string): Promise<User | undefined> {
     const userMail = await User.findOne({
-      relations: { invitations: true, albums: true },
+      relations: {
+        photos: true,
+        invitations: true,
+        albums: true,
+        friends: true,
+      },
       where: { email: email },
     });
 
@@ -55,7 +69,12 @@ export default class UsersService {
 
   async findOneById(id: number): Promise<User | undefined> {
     const user = await User.findOne({
-      relations: { invitations: true, albums: true },
+      relations: {
+        photos: true,
+        invitations: true,
+        albums: true,
+        friends: true,
+      },
       where: { id: id },
     });
 
@@ -73,7 +92,12 @@ export default class UsersService {
     await User.update(id, updateUserDto);
 
     const newUser = await User.findOne({
-      relations: { invitations: true, albums: true },
+      relations: {
+        photos: true,
+        invitations: true,
+        albums: true,
+        friends: true,
+      },
       where: { id: id },
     });
 
