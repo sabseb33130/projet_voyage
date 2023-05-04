@@ -20,7 +20,10 @@ import UsersService from 'src/users/users.service';
 import { AlbumsService } from 'src/albums/albums.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { editFileName, fileFilter } from './middleware/fileFilter';
+import {
+  /*  editFileName, */ editFileName,
+  fileFilter,
+} from './middleware/fileFilter';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -53,27 +56,22 @@ export default class PhotosController {
     @GetUser() user,
     @UploadedFiles() savedFiles: Array<Express.Multer.File>,
   ) {
-    console.log('coucou', savedFiles);
+    console.log('verif newImage');
 
     const userOne = await this.usersService.findOneById(user.userId);
     const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
-    let view;
-    if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
-    savedFiles.forEach(async (file) => {
-      view = await this.photosService.create(
-        userOne,
-        savedFiles,
-        createPhotoDto,
-      );
-    });
 
-    /*    console.log('user', userOne);
-    console.log('album', verifAlbum); */
-    console.log('photo', savedFiles);
+    if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
+
+    const view = await this.photosService.create(
+      userOne,
+      savedFiles,
+      createPhotoDto,
+    );
 
     return {
       statusCode: 201,
-      message: 'Votre photo a bien été ajoutée',
+      message: 'Votre photo ou vos photos ont été ajoutée',
       data: view,
     };
   }
@@ -96,6 +94,8 @@ export default class PhotosController {
       throw new NotFoundException("Cette photo n'existe pas ou plus");
     }
     await this.photosService.remove(id);
+    console.log(response);
+
     return {
       status: 200,
       message: `Votre photo a bien été supprimée`,

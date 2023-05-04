@@ -67,15 +67,15 @@ export default class PhotosService {
     createPhotoDto: CreatePhotoDto,
   ): Promise<Photo | undefined> {
     const album = await Album.findOneBy({ id: +createPhotoDto.albumId });
-    console.log('file', files);
-
+    console.log('fileback', files);
     const newPhoto = new Photo();
-    newPhoto.user = user;
-    newPhoto.file = files[0].filename;
-    newPhoto.originalName = files[0].originalname;
-    newPhoto.albums = [album];
-    await Photo.save(newPhoto);
-    console.log('ajout photo', newPhoto);
+    files.map((file, i) => {
+      newPhoto.user = user;
+      newPhoto.file = file.filename;
+      newPhoto.originalName = file.originalname;
+      newPhoto.albums = [album];
+      Photo.save(newPhoto);
+    });
 
     return newPhoto;
   }
@@ -94,9 +94,11 @@ export default class PhotosService {
     const nomPhoto = await Photo.findOneBy({ originalName: photo });
     return nomPhoto;
   }
-  
+
   async remove(id: number) {
     const deletedImage = await Photo.findOneBy({ id });
+    console.log(deletedImage);
+
     deletedImage.remove();
     if (deletedImage) {
       return deletedImage;
