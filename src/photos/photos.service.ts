@@ -94,10 +94,7 @@ export default class PhotosService {
     const nomPhoto = await Photo.findOneBy({ originalName: photo });
     return nomPhoto;
   }
-  /**
-   * @method deleteImage :
-   * * Methode permettant de supprimer une image de son topic.
-   */
+  
   async remove(id: number) {
     const deletedImage = await Photo.findOneBy({ id });
     deletedImage.remove();

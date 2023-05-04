@@ -59,9 +59,13 @@ export default class PhotosController {
     const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
     let view;
     if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
-    // files.forEach(async (file) => {
-    view = await this.photosService.create(userOne, savedFiles, createPhotoDto);
-    //  });
+    savedFiles.forEach(async (file) => {
+      view = await this.photosService.create(
+        userOne,
+        savedFiles,
+        createPhotoDto,
+      );
+    });
 
     /*    console.log('user', userOne);
     console.log('album', verifAlbum); */
@@ -83,14 +87,14 @@ export default class PhotosController {
   @ApiResponse({ status: 200, description: 'Photo supprimée avec succès' })
   async removeImage(
     @Param('id', ParseIntPipe) id: number,
-    @Body() albumId: number,
+    /* @Body() albumId: number, */
   ) {
     const response = await this.photosService.findOne(id);
-    const album = await this.albumsService.findOne(albumId);
-    if (album)
-      if (!response) {
-        throw new NotFoundException("Cette photo n'existe pas ou plus");
-      }
+    /* const album = await this.albumsService.findOne(albumId); */
+    /*  if (album) */
+    if (!response) {
+      throw new NotFoundException("Cette photo n'existe pas ou plus");
+    }
     await this.photosService.remove(id);
     return {
       status: 200,
