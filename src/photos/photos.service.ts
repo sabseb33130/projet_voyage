@@ -69,7 +69,7 @@ export default class PhotosService {
     const album = await Album.findOneBy({ id: +createPhotoDto.albumId });
     console.log('fileback', files);
     const newPhoto = new Photo();
-    files.map((file, i) => {
+    files.map((file) => {
       newPhoto.user = user;
       newPhoto.file = file.filename;
       newPhoto.originalName = file.originalname;

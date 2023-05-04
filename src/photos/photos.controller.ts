@@ -8,26 +8,21 @@ import {
   ParseIntPipe,
   Post,
   Res,
-  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import PhotosService from './photos.service';
-
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import UsersService from 'src/users/users.service';
 import { AlbumsService } from 'src/albums/albums.service';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import {
-  /*  editFileName, */ editFileName,
-  fileFilter,
-} from './middleware/fileFilter';
+import { editFileName, fileFilter } from './middleware/fileFilter';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-
+import * as fs from 'fs';
 @Controller('api/photos')
 export default class PhotosController {
   constructor(
@@ -56,8 +51,6 @@ export default class PhotosController {
     @GetUser() user,
     @UploadedFiles() savedFiles: Array<Express.Multer.File>,
   ) {
-    console.log('verif newImage');
-
     const userOne = await this.usersService.findOneById(user.userId);
     const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
 
@@ -88,6 +81,7 @@ export default class PhotosController {
     /* @Body() albumId: number, */
   ) {
     const response = await this.photosService.findOne(id);
+
     /* const album = await this.albumsService.findOne(albumId); */
     /*  if (album) */
     if (!response) {
@@ -95,13 +89,19 @@ export default class PhotosController {
     }
     await this.photosService.remove(id);
     console.log(response);
-
+    fs.unlink(`./uploads/${response.file}`, (err) => {
+      if (err) {
+        console.error(err);
+        return err;
+      }
+    });
     return {
       status: 200,
       message: `Votre photo a bien été supprimée`,
       data: response,
     };
   }
+
   /*  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilter })) //Nom du fichier dans le champs du formulaire HTML et nombre maximum de photos
