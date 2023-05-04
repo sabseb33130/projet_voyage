@@ -27,8 +27,8 @@ export const fileFilter = (req: any, file: any, callback: any) => {
  */
 export const editFileName = (req: any, file: any, callback: any) => {
   // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9); //retourne un numéro multer propre à chaque photo
-  const ext = file.originalname; //extension du fichier original
-  const filename = `${ext}`;
+
+  const filename = file.originalname;
   console.log(filename);
 
   callback(null, filename);
