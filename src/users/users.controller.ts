@@ -98,6 +98,8 @@ export default class UsersController {
       userLogged,
       updateUserDto,
     );
+    console.log('id', userLogged);
+    console.log('dto', updateUserDto);
 
     return {
       statusCode: 201,

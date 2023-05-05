@@ -20,6 +20,10 @@ export default class Invitations extends BaseEntity {
 
   @Column({ type: 'integer', default: 0 })
   Access_level: number; */
-  @ManyToOne(() => User, (user) => user.invitations, { cascade: true })
+  @ManyToOne(() => User, (user) => user.invitations, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   user: number;
 }

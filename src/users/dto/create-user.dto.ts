@@ -64,6 +64,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   departement: string;
   @ApiProperty()
+  @IsOptional()
   @IsString()
   photo1: string;
 }
