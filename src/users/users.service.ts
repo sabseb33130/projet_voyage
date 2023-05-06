@@ -98,8 +98,6 @@ export default class UsersService {
         friends: true,
       },
     });
-    console.log(updateUserDto.codepostal);
-    console.log(newUser.codepostal);
 
     if (updateUserDto.adresse_line1)
       newUser.adresse_line1 = updateUserDto.adresse_line1;

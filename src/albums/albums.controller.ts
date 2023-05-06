@@ -98,11 +98,6 @@ export class AlbumsController {
       test[0].find((elm) => elm.id) !== user.userId
     ) { */
     const upAlbum = await this.albumsService.update(+id, updateAlbumDto, user1);
-    console.log('up', upAlbum);
-
-    const returnAlbum = await this.albumsService.findOne(+id);
-    /*  console.log('find', returnAlbum);
-      console.log('update', upAlbum); */
 
     return {
       statusCode: 201,

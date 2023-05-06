@@ -61,8 +61,6 @@ export class AlbumsService {
     updateAlbumDto: UpdateAlbumDto,
     getUser: User,
   ): Promise<Album | undefined> {
-    console.log(getUser);
-
     const updateAlbum = await Album.findOneBy({ id });
     const photo = await Photo.findOneBy({ id: updateAlbumDto.photosId });
     //updateAlbum.user = updateAlbum.user.push(getUser);
@@ -71,7 +69,6 @@ export class AlbumsService {
     updateAlbum.date_fin = updateAlbumDto.date_fin;
     updateAlbum.description = updateAlbumDto.description;
     updateAlbum.photos.push(photo);
-    console.log('upservice', updateAlbum);
 
     await updateAlbum.save();
 

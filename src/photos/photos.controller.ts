@@ -91,7 +91,7 @@ export default class PhotosController {
       throw new NotFoundException("Cette photo n'existe pas ou plus");
     }
     await this.photosService.remove(id);
-    console.log(response);
+
     fs.unlink(`./uploads/${response.file}`, (err) => {
       if (err) {
         console.error(err);
@@ -128,39 +128,7 @@ export default class PhotosController {
       data: photoUp,
     };
   }
-  /*  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilter })) //Nom du fichier dans le champs du formulaire HTML et nombre maximum de photos
-  @Post('uploads')
-  async create(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() createPhotoDto: CreatePhotoDto,
-    @GetUser() user,
-  ) {
-    const userOne = await this.usersService.findOneById(user.userId);
-    const verifAlbum = await this.albumsService.findOne(
-      +createPhotoDto.albumId,
-    );
-    if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
-
-    const newPhoto = await this.photosService.findOneNom(file.originalname);
-    if (newPhoto && verifAlbum)
-      throw new ConflictException('Photo déjà enregistrée');
-
-    const photoNew = await this.photosService.create(
-      createPhotoDto,
-      userOne,
-      file,
-    );
-    console.log(photoNew);
-
-    return {
-      status: 201,
-      message: 'Votre photo a été bien ajoutée',
-      data: photoNew,
-    };
-  }
-
+  /*
   @Get()
   async findAll() {
     const allPhoto = await this.photosService.findAll();
@@ -174,27 +142,7 @@ export default class PhotosController {
       data: allPhoto,
     };
   }
-  /*  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard) 
-  @Get('file/:id')
-  async getFile(
-    @Param('id', ParseIntPipe) id: number,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<StreamableFile> {
-    const photo = await this.photosService.findOne(id); //Permet de trouver ma photo
-    const filePhoto = photo.photo; //me permet de récupérer la référence du blob
-
-    const file = createReadStream(join(process.cwd(), `uploads/${filePhoto}`)); //permet de rendre le blob lisible.
-    console.log(join(process.cwd(), `uploads/${filePhoto}`));
-    res.set({
-      'Content-Type': 'image/png',
-      // 'Content-Disposition': `attachment; filename= "${file}"`,
-    }); //typage du header
-
-    const result = new StreamableFile(file);
-
-    return result;
-  }
+  
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
@@ -232,17 +180,5 @@ export default class PhotosController {
     };
   }
 
-  @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    const delPhoto = await this.photosService.findOne(id);
-    if (!delPhoto) {
-      throw new NotFoundException('La photo est déjà supprimée.');
-    }
-    const photoDel = await this.photosService.remove(id);
-    return {
-      status: 200,
-      message: `Cette photo vient d'être supprimée`,
-      data: photoDel,
-    };
-  } */
+  */
 }

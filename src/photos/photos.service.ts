@@ -4,7 +4,6 @@ import { UpdatePhotoDto } from './dto/update-photo.dto';
 import Photo from './entities/photo.entity';
 import User from 'src/users/entities/user.entity';
 import Album from 'src/albums/entities/album.entity';
-import { log } from 'console';
 
 @Injectable()
 export default class PhotosService {
@@ -68,7 +67,7 @@ export default class PhotosService {
     createPhotoDto: CreatePhotoDto,
   ): Promise<Photo | undefined> {
     const album = await Album.findOneBy({ id: +createPhotoDto.albumId });
-    console.log('fileback', files);
+
     const newPhoto = new Photo();
     files.map((file) => {
       newPhoto.user = user;
@@ -104,16 +103,13 @@ export default class PhotosService {
     const updatePhoto = await Photo.findOneBy({ id: id });
     updatePhoto?.albums.push(albumId);
     const upPhoto = updatePhoto.save();
-    console.log('id', albumId);
-    console.log('save', upPhoto);
 
-    console.log('photo', updatePhoto);
     return upPhoto;
   }
 
   async remove(id: number) {
     const deletedImage = await Photo.findOneBy({ id });
-    console.log('delete', deletedImage);
+
     deletedImage.remove();
     if (deletedImage) {
       return deletedImage;
