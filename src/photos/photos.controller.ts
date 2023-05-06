@@ -79,25 +79,26 @@ export default class PhotosController {
   @Delete(':id')
   @ApiOperation({ summary: "Suppression d'une photo " })
   @ApiResponse({ status: 200, description: 'Photo supprimée avec succès' })
-  async removeImage(
-    @Param('id', ParseIntPipe) id: number,
-    /* @Body() albumId: number, */
-  ) {
+  async removeImage(@Param('id', ParseIntPipe) id: number) {
     const response = await this.photosService.findOne(id);
 
-    /* const album = await this.albumsService.findOne(albumId); */
-    /*  if (album) */
     if (!response) {
       throw new NotFoundException("Cette photo n'existe pas ou plus");
     }
-    await this.photosService.remove(id);
+    const album = await this.albumsService.findAll();
+    const test = album.map((data) =>
+      data.photos.find((elm) => elm.file === response.file),
+    );
 
-    fs.unlink(`./uploads/${response.file}`, (err) => {
-      if (err) {
-        console.error(err);
-        return err;
-      }
-    });
+    test.length > 1
+      ? await this.photosService.remove(id)
+      : (await this.photosService.remove(id),
+        fs.unlink(`./uploads/${response.file}`, (err) => {
+          if (err) {
+            console.error(err);
+            return err;
+          }
+        }));
     return {
       status: 200,
       message: `Votre photo a bien été supprimée`,

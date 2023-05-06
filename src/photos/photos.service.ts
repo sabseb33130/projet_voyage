@@ -109,6 +109,12 @@ export default class PhotosService {
 
   async remove(id: number) {
     const deletedImage = await Photo.findOneBy({ id });
+    /* const album = await Album.find();
+    const test = album.map((data) =>
+      data.photos.filter((elm) => elm.file === deletedImage.file),
+    );
+    test.length > 1;
+    console.log(deletedImage); */
 
     deletedImage.remove();
     if (deletedImage) {
