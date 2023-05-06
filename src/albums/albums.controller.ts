@@ -20,6 +20,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GetUser } from 'src/auth/get_user.decorator';
 import UsersService from 'src/users/users.service';
 import User from 'src/users/entities/user.entity';
+import PhotosService from 'src/photos/photos.service';
 @UseGuards(JwtAuthGuard)
 @ApiTags('albums')
 @Controller('api/albums')
@@ -28,6 +29,7 @@ export class AlbumsController {
   constructor(
     private readonly albumsService: AlbumsService,
     private readonly usersService: UsersService,
+    private readonly photosService: PhotosService,
   ) {}
 
   @Post()
@@ -88,28 +90,26 @@ export class AlbumsController {
     /*    if (test[0].find((elm) => elm.id) === undefined)
       throw new NotFoundException('?????'); */
 
-    if (test[0].find((elm) => elm.id) === user.userId)
+    /*     if (test[0].find((elm) => elm.id) === user.userId)
       throw new ConflictException('Vous êtes déjà abonnés à cet album');
 
     if (
       test[0].find((elm) => elm.id) === undefined ||
       test[0].find((elm) => elm.id) !== user.userId
-    ) {
-      const upAlbum = await this.albumsService.update(
-        +id,
-        updateAlbumDto,
-        user1,
-      );
-      const returnAlbum = await this.albumsService.findOne(+id);
-      /*  console.log('find', returnAlbum);
+    ) { */
+    const upAlbum = await this.albumsService.update(+id, updateAlbumDto, user1);
+    console.log('up', upAlbum);
+
+    const returnAlbum = await this.albumsService.findOne(+id);
+    /*  console.log('find', returnAlbum);
       console.log('update', upAlbum); */
 
-      return {
-        statusCode: 201,
-        message: 'Modifications enregistrées.',
-        data: upAlbum,
-      };
-    }
+    return {
+      statusCode: 201,
+      message: 'Modifications enregistrées.',
+      data: upAlbum,
+      /*  }; */
+    };
   }
 
   @Delete(':id')

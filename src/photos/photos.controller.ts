@@ -1,11 +1,13 @@
 import {
   Body,
+  ConflictException,
   Controller,
   Delete,
   Get,
   NotFoundException,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Res,
   UploadedFiles,
@@ -21,8 +23,9 @@ import { diskStorage } from 'multer';
 import { editFileName, fileFilter } from './middleware/fileFilter';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { CreatePhotoDto } from './dto/create-photo.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import * as fs from 'fs';
+import { UpdatePhotoDto } from './dto/update-photo.dto';
 @Controller('api/photos')
 export default class PhotosController {
   constructor(
@@ -102,6 +105,29 @@ export default class PhotosController {
     };
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePhotoDto: UpdatePhotoDto,
+  ) {
+    const upPhoto = await this.photosService.findOne(id);
+    if (!upPhoto) {
+      throw new NotFoundException(`La photo n'existe pas `);
+    }
+    const verifAlbum = await this.albumsService.findOne(
+      +updatePhotoDto.albumId,
+    );
+    /*   if (verifAlbum)
+      throw new ConflictException('La photo est déjà dans l album'); */
+    const photoUp = await this.photosService.update(id, updatePhotoDto);
+    return {
+      status: 200,
+      message: 'Voici la photo enregistrée',
+      data: photoUp,
+    };
+  }
   /*  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilter })) //Nom du fichier dans le champs du formulaire HTML et nombre maximum de photos

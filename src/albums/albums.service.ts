@@ -4,6 +4,7 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import Album from './entities/album.entity';
 import User from 'src/users/entities/user.entity';
 import { GetUser } from 'src/auth/get_user.decorator';
+import Photo from 'src/photos/entities/photo.entity';
 
 @Injectable()
 export class AlbumsService {
@@ -63,11 +64,15 @@ export class AlbumsService {
     console.log(getUser);
 
     const updateAlbum = await Album.findOneBy({ id });
-    // updateAlbum.user = updateAlbum.user.push(getUser);
+    const photo = await Photo.findOneBy({ id: updateAlbumDto.photosId });
+    //updateAlbum.user = updateAlbum.user.push(getUser);
     updateAlbum.nom_album = updateAlbumDto.nom_album;
     updateAlbum.date_debut = updateAlbumDto.date_debut;
     updateAlbum.date_fin = updateAlbumDto.date_fin;
     updateAlbum.description = updateAlbumDto.description;
+    updateAlbum.photos.push(photo);
+    console.log('upservice', updateAlbum);
+
     await updateAlbum.save();
 
     return updateAlbum;
@@ -76,6 +81,7 @@ export class AlbumsService {
   async delete(id: number): Promise<Album | undefined> {
     const suppId = await Album.findOneBy({ id });
     await Album.remove(suppId);
+
     return suppId;
   }
 }
