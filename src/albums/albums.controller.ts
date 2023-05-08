@@ -35,18 +35,16 @@ export class AlbumsController {
   @Post()
   async create(@Body() createAlbumDto: CreateAlbumDto, @GetUser() user) {
     const user1 = await this.usersService.findOneById(user.userId);
-    const verifAlbum = await this.albumsService.findOneNom(
-      createAlbumDto.nom_album,
-    );
-    const albumDate = await this.albumsService.findOneDate(
-      createAlbumDto.date_debut,
-    );
-
-    const test = verifAlbum.find(
+    //Vérification q'un album avec le même nom existe déjà
+    const nomAlbumVerif = user1.albums.find(
       (elm) => elm.nom_album === createAlbumDto.nom_album,
     );
+    const dateAlbumVerif = user1.albums.find(
+      (elm) => elm.date_debut === createAlbumDto.date_debut,
+    );
 
-    if (test && user.userId) throw new ConflictException('Album déjà créé ');
+    if (nomAlbumVerif && dateAlbumVerif)
+      throw new ConflictException('Album déjà créé ');
 
     const albumNew = await this.albumsService.create(createAlbumDto, user1);
 
