@@ -70,11 +70,15 @@ export default class User extends BaseEntity {
   /*   @ApiProperty()
   @Column({ type: 'varchar', nullable: true })
   photo1: string; */
-  @OneToMany(() => Photo, (photo) => photo.user, { cascade: true })
+  @OneToMany(() => Photo, (photo) => photo.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   photos: Photo[];
   @ManyToMany(() => Album, (album) => album.user, {
     eager: true,
     cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinTable()
   albums: Album[];

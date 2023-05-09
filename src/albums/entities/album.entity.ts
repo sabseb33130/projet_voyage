@@ -26,6 +26,7 @@ export default class Album extends BaseEntity {
   @ManyToMany(() => Photo, (photo) => photo.albums, {
     eager: true,
     cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinTable()
   photos: Photo[];

@@ -21,6 +21,7 @@ import { GetUser } from 'src/auth/get_user.decorator';
 import UsersService from 'src/users/users.service';
 import User from 'src/users/entities/user.entity';
 import PhotosService from 'src/photos/photos.service';
+import Photo from 'src/photos/entities/photo.entity';
 @UseGuards(JwtAuthGuard)
 @ApiTags('albums')
 @Controller('api/albums')
@@ -108,6 +109,12 @@ export class AlbumsController {
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     const oneAlbum = await Album.findOneBy({ id });
+    const allAlbum = await Album.find();
+    const allPhoto = await Photo.find();
+    console.log('un', oneAlbum);
+    console.log('tout', allAlbum);
+    console.log('photo', allPhoto);
+
     if (!oneAlbum) {
       throw new NotFoundException(`L'album n'existe pas ou est déjà supprimé`);
     }
