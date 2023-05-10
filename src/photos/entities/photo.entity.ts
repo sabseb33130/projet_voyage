@@ -16,7 +16,6 @@ export default class Photo extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  //test
   @ApiProperty()
   @Column({
     nullable: true,
@@ -28,12 +27,13 @@ export default class Photo extends BaseEntity {
     nullable: true,
   })
   file: string;
-  //
-
-  @ManyToMany(() => Album, (album) => album.photos)
+  @ApiProperty()
+  @Column({ nullable: true })
+  description: string;
+  @ManyToMany(() => Album, (album) => album.photos, { onDelete: 'CASCADE' })
   albums: Album[];
 
   @ApiProperty()
-  @ManyToOne(() => User, (user) => user.photos)
+  @ManyToOne(() => User, (user) => user.photos, { onDelete: 'CASCADE' })
   user: User;
 }

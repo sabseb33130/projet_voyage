@@ -27,6 +27,7 @@ export default class Album extends BaseEntity {
     eager: true,
     cascade: true,
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinTable()
   photos: Photo[];

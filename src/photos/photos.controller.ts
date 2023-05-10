@@ -81,7 +81,6 @@ export default class PhotosController {
   @ApiResponse({ status: 200, description: 'Photo supprimée avec succès' })
   async removeImage(@Param('id', ParseIntPipe) id: number) {
     const response = await this.photosService.findOne(id);
-
     if (!response) {
       throw new NotFoundException("Cette photo n'existe pas ou plus");
     }
@@ -89,7 +88,6 @@ export default class PhotosController {
     const test = album.map((data) =>
       data.photos.find((elm) => elm.file === response.file),
     );
-
     test.length > 1
       ? await this.photosService.remove(id)
       : (await this.photosService.remove(id),
@@ -129,57 +127,4 @@ export default class PhotosController {
       data: photoUp,
     };
   }
-  /*
-  @Get()
-  async findAll() {
-    const allPhoto = await this.photosService.findAll();
-    if (!allPhoto) {
-      throw new NotFoundException('Pas de photo encore enregistrée');
-    }
-
-    return {
-      status: 200,
-      message: 'Voici toutes les photos enregistrées',
-      data: allPhoto,
-    };
-  }
-  
-
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    const photoId = await this.photosService.findOne(id);
-    if (!photoId) {
-      throw new NotFoundException("La photo recherchée n'existe pas.");
-    }
-    return photoId   status: 200,
-      message: 'Voici la photo enregistrée',
-      data: ;
-  }
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Patch(':id')
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updatePhotoDto: UpdatePhotoDto,
-  ) {
-    const upPhoto = await this.photosService.findOne(id);
-    if (!upPhoto) {
-      throw new NotFoundException(`La photo n'existe pas `);
-    }
-    const verifAlbum = await this.albumsService.findOne(
-      +updatePhotoDto.albumId,
-    );
-    if (verifAlbum)
-      throw new ConflictException('La photo est déjà dans l album');
-    const photoUp = await this.photosService.update(id, updatePhotoDto);
-    return {
-      status: 200,
-      message: 'Voici la photo enregistrée',
-      data: photoUp,
-    };
-  }
-
-  */
 }

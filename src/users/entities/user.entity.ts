@@ -73,12 +73,14 @@ export default class User extends BaseEntity {
   @OneToMany(() => Photo, (photo) => photo.user, {
     cascade: true,
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   photos: Photo[];
   @ManyToMany(() => Album, (album) => album.user, {
     eager: true,
     cascade: true,
     onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinTable()
   albums: Album[];
