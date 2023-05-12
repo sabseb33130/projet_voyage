@@ -82,8 +82,9 @@ export default class PhotosController {
     }
     const album = await this.albumsService.findAll();
     const test = album.map((data) =>
-      data.photos.find((elm) => elm.file === response.file),
+      data.photos.filter((elm) => elm.file === response.file),
     );
+
     test.length > 1
       ? await this.photosService.remove(id)
       : (await this.photosService.remove(id),
