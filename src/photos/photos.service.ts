@@ -56,7 +56,7 @@ export default class PhotosService {
     return upPhoto;
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Photo | undefined> {
     const deletedImage = await Photo.findOneBy({ id });
 
     deletedImage.remove();

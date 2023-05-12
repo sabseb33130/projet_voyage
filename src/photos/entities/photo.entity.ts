@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-
 import Album from 'src/albums/entities/album.entity';
 import User from 'src/users/entities/user.entity';
 import {
@@ -17,15 +16,11 @@ export default class Photo extends BaseEntity {
   id: number;
 
   @ApiProperty()
-  @Column({
-    nullable: true,
-  })
+  @Column()
   originalName: string;
 
   @ApiProperty()
-  @Column({
-    nullable: true,
-  })
+  @Column()
   file: string;
   @ApiProperty()
   @Column({ nullable: true })

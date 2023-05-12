@@ -1,6 +1,5 @@
 import {
   Body,
-  ConflictException,
   Controller,
   Delete,
   Get,
@@ -33,11 +32,8 @@ export default class PhotosController {
     private readonly usersService: UsersService,
     private readonly albumsService: AlbumsService,
   ) {}
-
-  //test
   //FileInterceptor prend 2 arguments, un fieldname et un objet d'options facultatif(vérif les types de fichiers corrects et donner un nom perso dans le répertoire)
   //fonction utilisable avec multer retourne un moteur de stockage implémenté pour stocker les photos en local.
-
   @UseGuards(JwtAuthGuard)
   @Post('uploads')
   @UseInterceptors(
@@ -93,7 +89,6 @@ export default class PhotosController {
       : (await this.photosService.remove(id),
         fs.unlink(`./uploads/${response.file}`, (err) => {
           if (err) {
-            console.error(err);
             return err;
           }
         }));

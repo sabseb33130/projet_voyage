@@ -1,4 +1,4 @@
-import path, { extname } from 'path';
+import { extname } from 'path';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 /**
@@ -20,13 +20,11 @@ export const fileFilter = (req: any, file: any, callback: any) => {
     );
   }
 };
-
 /**
  * @fonction middleware editFileName:
  * * Crée un nom de fichier personnalisé en utilisant le nom d'origine, extension de fichier et nombre aléatoire.
  */
 export const editFileName = (req: any, file: any, callback: any) => {
   const filename = file.originalname;
-
   callback(null, filename);
 };
