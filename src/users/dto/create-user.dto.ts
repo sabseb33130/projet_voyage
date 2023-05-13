@@ -24,10 +24,6 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(6, { message: 'veuiller saisir six caracteres minimum' })
-  @Matches(
-    /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[\]:;<>,.?\/~_+-=|]).{8,32}$/,
-    { message: 'Le password ne correspond pas aux prérequis.' },
-  )
   pseudo: string;
 
   @ApiProperty()
@@ -38,7 +34,10 @@ export class CreateUserDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  @MinLength(8)
+  @Matches(
+    /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[\]:;<>,.?\/~_+-=|]).{8,32}$/,
+    { message: 'Le password ne correspond pas aux prérequis.' },
+  )
   password: string;
 
   @ApiProperty()

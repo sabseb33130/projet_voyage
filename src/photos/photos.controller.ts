@@ -52,6 +52,7 @@ export default class PhotosController {
   ) {
     const userOne = await this.usersService.findOneById(user.userId);
     const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
+    console.log(userOne);
 
     if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
 
@@ -71,6 +72,7 @@ export default class PhotosController {
   async seeUploadedFile(@Param('imgpath') file, @Res() res) {
     return res.sendFile(file, { root: './uploads' });
   }
+
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: "Suppression d'une photo " })
@@ -120,6 +122,17 @@ export default class PhotosController {
       status: 200,
       message: 'Voici la photo enregistrée',
       data: photoUp,
+    };
+  }
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async photoAll(@GetUser() user) {
+    const allPhoto = await this.photosService.findAll(user.userId);
+
+    return {
+      status: 200,
+      message: 'Voici la photo enregistrée',
+      data: allPhoto,
     };
   }
 }

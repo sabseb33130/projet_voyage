@@ -27,10 +27,13 @@ export default class PhotosService {
 
     return newPhoto;
   }
-  async findAll(): Promise<Photo[] | undefined> {
+  async findAll(user: number): Promise<Photo[][] | undefined> {
+    const albumUser = await User.findOneBy({ id: user });
+    const allPhotos = albumUser.albums.map((elm) => elm.photos);
+
     const allPhoto = await Photo.find();
 
-    return allPhoto;
+    return allPhotos;
   }
 
   async findOne(id: number): Promise<Photo | undefined> {
