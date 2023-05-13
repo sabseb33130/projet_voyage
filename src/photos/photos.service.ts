@@ -50,10 +50,17 @@ export default class PhotosService {
     id: number,
     updatePhotoDto: UpdatePhotoDto,
   ): Promise<Photo | undefined> {
+    console.log('id', id);
+    console.log('update', updatePhotoDto);
+
     const albumId = await Album.findOneBy({ id: updatePhotoDto.albumId });
     const updatePhoto = await Photo.findOneBy({ id: id });
+    console.log(albumId);
+
     updatePhoto.description = updatePhotoDto.description;
+
     updatePhoto?.albums.push(albumId);
+
     const upPhoto = updatePhoto.save();
 
     return upPhoto;

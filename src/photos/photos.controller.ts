@@ -25,6 +25,7 @@ import { CreatePhotoDto } from './dto/create-photo.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
+import Album from 'src/albums/entities/album.entity';
 @Controller('api/photos')
 export default class PhotosController {
   constructor(
@@ -83,11 +84,14 @@ export default class PhotosController {
       throw new NotFoundException("Cette photo n'existe pas ou plus");
     }
     const album = await this.albumsService.findAll();
-    const test = album.map((data) =>
-      data.photos.filter((elm) => elm.file === response.file),
-    );
 
-    test.length > 1
+    const photo = album
+      .map((data) =>
+        data.photos.find((elm) => elm.originalName === response.originalName),
+      )
+      .filter((data) => data).length;
+
+    photo > 1
       ? await this.photosService.remove(id)
       : (await this.photosService.remove(id),
         fs.unlink(`./uploads/${response.file}`, (err) => {
@@ -113,6 +117,7 @@ export default class PhotosController {
     if (!upPhoto) {
       throw new NotFoundException(`La photo n'existe pas `);
     }
+
     const verifAlbum = await this.albumsService.findOne(
       +updatePhotoDto.albumId,
     );

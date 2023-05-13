@@ -1,4 +1,3 @@
-import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
 export class CreatePhotoDto {
@@ -6,6 +5,6 @@ export class CreatePhotoDto {
   @IsNotEmpty()
   albumId: number;
   @ApiProperty()
-  @Optional()
+  @IsOptional()
   description: string;
 }
