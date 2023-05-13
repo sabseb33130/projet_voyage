@@ -50,19 +50,15 @@ export default class PhotosService {
     id: number,
     updatePhotoDto: UpdatePhotoDto,
   ): Promise<Photo | undefined> {
-    console.log('id', id);
-    console.log('update', updatePhotoDto);
-
-    const albumId = await Album.findOneBy({ id: updatePhotoDto.albumId });
     const updatePhoto = await Photo.findOneBy({ id: id });
-    console.log(albumId);
+    const albumId = await Album.findOneBy({ id: updatePhotoDto.albumId });
+    const verifAlbum = albumId.id !== +updatePhotoDto.albumId;
 
     updatePhoto.description = updatePhotoDto.description;
-
-    updatePhoto?.albums.push(albumId);
-
+    if (verifAlbum) {
+      updatePhoto?.albums.push(albumId);
+    }
     const upPhoto = updatePhoto.save();
-
     return upPhoto;
   }
 
