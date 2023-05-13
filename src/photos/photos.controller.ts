@@ -131,7 +131,7 @@ export default class PhotosController {
 
     return {
       status: 200,
-      message: 'Voici la photo enregistrée',
+      message: 'Voici les photos présentes dans tous vos albums',
       data: allPhoto,
     };
   }
