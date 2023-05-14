@@ -17,19 +17,18 @@ export default class PhotosService {
    */
   async create(
     user: User,
-    files: Array<Express.Multer.File>,
+    file: Express.Multer.File,
     createPhotoDto: CreatePhotoDto,
   ): Promise<Photo | undefined> {
     const album = await Album.findOneBy({ id: +createPhotoDto.albumId });
     const newPhoto = new Photo();
-    files.map((file) => {
-      newPhoto.user = user;
-      newPhoto.file = file.filename;
-      newPhoto.originalName = file.originalname;
-      newPhoto.description = createPhotoDto.description;
-      newPhoto.albums = [album];
-      Photo.save(newPhoto);
-    });
+
+    newPhoto.user = user;
+    newPhoto.file = file.filename;
+    newPhoto.originalName = file.originalname;
+    newPhoto.description = createPhotoDto.description;
+    newPhoto.albums = [album];
+    Photo.save(newPhoto);
 
     return newPhoto;
   }

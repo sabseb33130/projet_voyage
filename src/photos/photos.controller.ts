@@ -56,12 +56,10 @@ export default class PhotosController {
     console.log(userOne);
 
     if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
-
-    const view = await this.photosService.create(
-      userOne,
-      savedFiles,
-      createPhotoDto,
-    );
+    let view;
+    savedFiles.forEach(async (file) => {
+      view = await this.photosService.create(userOne, file, createPhotoDto);
+    });
 
     return {
       statusCode: 201,

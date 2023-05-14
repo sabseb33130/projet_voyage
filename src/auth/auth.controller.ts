@@ -4,7 +4,7 @@ import { LoginDto } from './login.dto';
 import { AuthService } from './auth.service';
 import { Request, Post, UseGuards, Controller } from '@nestjs/common';
 @Controller('auth/')
-export default class AuthController {
+export class AuthController {
   constructor(private authService: AuthService) {}
 
   @ApiBody({ type: LoginDto })
