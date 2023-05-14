@@ -73,6 +73,37 @@ export default class PhotosController {
   async seeUploadedFile(@Param('imgpath') file, @Res() res) {
     return res.sendFile(file, { root: './uploads' });
   }
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async photoAll(@GetUser() user) {
+    const allPhoto = await this.photosService.findAll(user.userId);
+
+    return {
+      status: 200,
+      message: 'Voici les photos présentes dans tous vos albums',
+      data: allPhoto,
+    };
+  }
+
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: 'Voici la photo enregistrée' })
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePhotoDto: UpdatePhotoDto,
+  ) {
+    const upPhoto = await this.photosService.findOne(id);
+    if (!upPhoto) {
+      throw new NotFoundException(`La photo n'existe pas `);
+    }
+    const photoUp = await this.photosService.update(id, updatePhotoDto);
+    return {
+      status: 200,
+      message: 'Voici la photo enregistrée',
+      data: photoUp,
+    };
+  }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
@@ -103,39 +134,6 @@ export default class PhotosController {
       status: 200,
       message: `Votre photo a bien été supprimée`,
       data: response,
-    };
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Patch(':id')
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updatePhotoDto: UpdatePhotoDto,
-  ) {
-    const upPhoto = await this.photosService.findOne(id);
-    if (!upPhoto) {
-      throw new NotFoundException(`La photo n'existe pas `);
-    }
-    const verifAlbum = await this.albumsService.findOne(
-      +updatePhotoDto.albumId,
-    );
-    const photoUp = await this.photosService.update(id, updatePhotoDto);
-    return {
-      status: 200,
-      message: 'Voici la photo enregistrée',
-      data: photoUp,
-    };
-  }
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  async photoAll(@GetUser() user) {
-    const allPhoto = await this.photosService.findAll(user.userId);
-
-    return {
-      status: 200,
-      message: 'Voici les photos présentes dans tous vos albums',
-      data: allPhoto,
     };
   }
 }

@@ -17,12 +17,13 @@ import UsersService from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBearerAuth, ApiTags, ApiBody } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GetUser } from 'src/auth/get_user.decorator';
 import User from './entities/user.entity';
 
 @ApiTags('api/users')
+@ApiResponse({ status: 201, description: `Utilisateur enregistré` })
 @Controller('api/users')
 @UseInterceptors(ClassSerializerInterceptor)
 export default class UsersController {
@@ -67,7 +68,9 @@ export default class UsersController {
   }
 
   @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: `Voici tout les users` })
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   async findAll() {
     const users = await this.usersService.findAll();
@@ -77,7 +80,9 @@ export default class UsersController {
     return users;
   }
   @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: `Le compte a été supprimé` })
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('/compteperso')
   async findUser(@GetUser() user) {
     const users = await this.usersService.findOneById(user.userId);
@@ -85,11 +90,17 @@ export default class UsersController {
     if (!users)
       throw new NotFoundException('Pas de compte enregistreé pour l instant');
 
-    return users;
+    return {
+      statusCode: 200,
+      message: 'Voici les données de votre compte',
+      data: users,
+    };
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({ status: 201, description: `Modifications enregistrées` })
+  @UseInterceptors(ClassSerializerInterceptor)
   @Patch()
   async update(@Body() updateUserDto: UpdateUserDto, @GetUser() user) {
     const userLogged = user.userId;
@@ -109,7 +120,9 @@ export default class UsersController {
   }
 
   @ApiBearerAuth()
+  @ApiResponse({ status: 200, description: `Le compte a été supprimé` })
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Delete()
   async removeUser(@GetUser() user) {
     const userDeleted: number = user.userId;

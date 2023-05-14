@@ -7,14 +7,20 @@ import Album from 'src/albums/entities/album.entity';
 
 @Injectable()
 export default class PhotosService {
-  //test
+  /**
+   *
+   * @param user envoi le payload
+   * @param files envoi le fichier photo traité par multer
+   * @param createPhotoDto envoi le numéro de l'albumId
+   * @returns Photo[]
+   * files est le dossier qui peut contenir une a 8 photos donxc je le map avant de le save dans la table photo
+   */
   async create(
     user: User,
     files: Array<Express.Multer.File>,
     createPhotoDto: CreatePhotoDto,
   ): Promise<Photo | undefined> {
     const album = await Album.findOneBy({ id: +createPhotoDto.albumId });
-
     const newPhoto = new Photo();
     files.map((file) => {
       newPhoto.user = user;
@@ -31,8 +37,6 @@ export default class PhotosService {
     const albumUser = await User.findOneBy({ id: user });
     const allPhotos = albumUser.albums.map((elm) => elm.photos);
 
-    const allPhoto = await Photo.find();
-
     return allPhotos;
   }
 
@@ -45,7 +49,15 @@ export default class PhotosService {
     const nomPhoto = await Photo.findOneBy({ originalName: photo });
     return nomPhoto;
   }
-
+  /**
+   *
+   * @param id numéro de la photo
+   * @param updatePhotoDto contient l'album qui peut être ajouter et la description qui peut-être modifier
+   * @returns photo[]
+   * la const updatePhoto récupére la photo {id,originalname,file,description}
+   * la const albumId récupère l'album en cas d'ajout de la photo dans un autre album.
+   *
+   */
   async update(
     id: number,
     updatePhotoDto: UpdatePhotoDto,
