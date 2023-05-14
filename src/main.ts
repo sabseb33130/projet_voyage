@@ -9,7 +9,7 @@ let cors = require('cors');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(
-    /*  helmet.xssFilter() */ helmet.crossOriginResourcePolicy({
+    helmet.crossOriginResourcePolicy({
       policy: 'cross-origin',
     }),
   );

@@ -23,12 +23,12 @@ import { GetUser } from 'src/auth/get_user.decorator';
 import User from './entities/user.entity';
 
 @ApiTags('api/users')
-@ApiResponse({ status: 201, description: `Utilisateur enregistré` })
 @Controller('api/users')
 @UseInterceptors(ClassSerializerInterceptor)
 export default class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @ApiBody({ type: CreateUserDto })
+  @ApiResponse({ status: 201, description: `Utilisateur enregistré` })
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const saltOrRounds = 10;
@@ -68,7 +68,10 @@ export default class UsersController {
   }
 
   @ApiBearerAuth()
-  @ApiResponse({ status: 200, description: `Voici tout les users` })
+  @ApiResponse({
+    status: 200,
+    description: `Voici les données de votre compte`,
+  })
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
