@@ -6,12 +6,12 @@ import { AlbumsModule } from './albums/albums.module';
 import { PhotosModule } from './photos/photos.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import Album from './albums/entities/album.entity';
-import Photo from './photos/entities/photo.entity';
-import User from './users/entities/user.entity';
+import { Album } from './albums/entities/album.entity';
+import { Photo } from './photos/entities/photo.entity';
+import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 
-import Invitations from './invitations/entities/invitations.entity';
+import { Invitations } from './invitations/entities/invitations.entity';
 import { InvitationsModule } from './invitations/invitations.module';
 import { PhotoIdentiteModule } from './photo-identite/photo-identite.module';
 import { PhotoIdentite } from './photo-identite/entities/photo-identite.entity';

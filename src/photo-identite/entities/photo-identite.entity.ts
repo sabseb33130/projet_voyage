@@ -1,9 +1,8 @@
-import User from 'src/users/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';

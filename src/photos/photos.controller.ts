@@ -13,9 +13,9 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import PhotosService from './photos.service';
+import { PhotosService } from './photos.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import UsersService from 'src/users/users.service';
+import { UsersService } from 'src/users/users.service';
 import { AlbumsService } from 'src/albums/albums.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -25,9 +25,10 @@ import { CreatePhotoDto } from './dto/create-photo.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
-import Album from 'src/albums/entities/album.entity';
+import { Photo } from './entities/photo.entity';
+
 @Controller('api/photos')
-export default class PhotosController {
+export class PhotosController {
   constructor(
     private readonly photosService: PhotosService,
     private readonly usersService: UsersService,
@@ -53,13 +54,14 @@ export default class PhotosController {
   ) {
     const userOne = await this.usersService.findOneById(user.userId);
     const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
-    console.log(userOne);
 
     if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
-    let view;
-    savedFiles.forEach(async (file) => {
-      view = await this.photosService.create(userOne, file, createPhotoDto);
-    });
+
+    const view = await this.photosService.create(
+      userOne,
+      savedFiles,
+      createPhotoDto,
+    );
 
     return {
       statusCode: 201,

@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import Album from 'src/albums/entities/album.entity';
-import Invitations from 'src/invitations/entities/invitations.entity';
+import { Album } from 'src/albums/entities/album.entity';
+import { Invitations } from 'src/invitations/entities/invitations.entity';
 import { PhotoIdentite } from 'src/photo-identite/entities/photo-identite.entity';
-import Photo from 'src/photos/entities/photo.entity';
+import { Photo } from 'src/photos/entities/photo.entity';
 import {
   BaseEntity,
   Column,
@@ -19,7 +19,7 @@ import {
 
 @Entity('users')
 @Unique(['email', 'pseudo'])
-export default class User extends BaseEntity {
+export class User extends BaseEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;

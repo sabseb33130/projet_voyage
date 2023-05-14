@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
-import Photo from './entities/photo.entity';
-import User from 'src/users/entities/user.entity';
-import Album from 'src/albums/entities/album.entity';
+import { Photo } from './entities/photo.entity';
+import { User } from 'src/users/entities/user.entity';
+import { Album } from 'src/albums/entities/album.entity';
 
 @Injectable()
-export default class PhotosService {
+export class PhotosService {
   /**
    *
    * @param user envoi le payload
@@ -17,19 +17,19 @@ export default class PhotosService {
    */
   async create(
     user: User,
-    file: Express.Multer.File,
+    files: Array<Express.Multer.File>,
     createPhotoDto: CreatePhotoDto,
   ): Promise<Photo | undefined> {
     const album = await Album.findOneBy({ id: +createPhotoDto.albumId });
     const newPhoto = new Photo();
-
-    newPhoto.user = user;
-    newPhoto.file = file.filename;
-    newPhoto.originalName = file.originalname;
-    newPhoto.description = createPhotoDto.description;
-    newPhoto.albums = [album];
-    Photo.save(newPhoto);
-
+    files.forEach((file) => {
+      newPhoto.user = user;
+      newPhoto.file = file.filename;
+      newPhoto.originalName = file.originalname;
+      newPhoto.description = createPhotoDto.description;
+      newPhoto.albums = [album];
+      Photo.save(newPhoto);
+    });
     return newPhoto;
   }
   async findAll(user: number): Promise<Photo[][] | undefined> {

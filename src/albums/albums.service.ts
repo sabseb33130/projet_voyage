@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import Album from './entities/album.entity';
-import User from 'src/users/entities/user.entity';
-import { GetUser } from 'src/auth/get_user.decorator';
-import Photo from 'src/photos/entities/photo.entity';
+import { Album } from './entities/album.entity';
+import { User } from 'src/users/entities/user.entity';
+
+import { Photo } from 'src/photos/entities/photo.entity';
 
 @Injectable()
 export class AlbumsService {

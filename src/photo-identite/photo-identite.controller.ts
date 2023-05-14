@@ -23,7 +23,7 @@ import { fileFilter } from 'src/photos/middleware/fileFilter';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { createReadStream } from 'fs';
 import { join } from 'path';
-import User from 'src/users/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 import type { Response } from 'express';
 @Controller('api/photo-identite')
 export class PhotoIdentiteController {

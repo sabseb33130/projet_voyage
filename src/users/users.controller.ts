@@ -13,19 +13,19 @@ import {
   ParseIntPipe,
   Param,
 } from '@nestjs/common';
-import UsersService from './users.service';
+import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GetUser } from 'src/auth/get_user.decorator';
-import User from './entities/user.entity';
+import { User } from './entities/user.entity';
 
 @ApiTags('api/users')
 @Controller('api/users')
 @UseInterceptors(ClassSerializerInterceptor)
-export default class UsersController {
+export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @ApiBody({ type: CreateUserDto })
   @ApiResponse({ status: 201, description: `Utilisateur enregistré` })

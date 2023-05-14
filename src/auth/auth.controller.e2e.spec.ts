@@ -19,7 +19,7 @@ describe('AuthController (e2e)', () => {
   });
 
   describe('/auth/login (POST)', () => {
-    it('should return a JWT token if the credentials are valid', async () => {
+    it('Dois retourner le token si tout va bien', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
         .send({ pseudo: 'jeanseb02', password: 'jeanseb02' })
@@ -28,7 +28,7 @@ describe('AuthController (e2e)', () => {
       expect(response.body).toHaveProperty('accessToken');
     });
 
-    it('should return a 401 error if the credentials are invalid', async () => {
+    it('non ce n est pas la bonne combinaison', async () => {
       await request(app.getHttpServer())
         .post('/auth/login')
         .send({ pseudo: 'blabla', password: 'wrongpassword' })

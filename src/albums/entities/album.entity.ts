@@ -1,5 +1,5 @@
-import User from 'src/users/entities/user.entity';
-import Photo from 'src/photos/entities/photo.entity';
+import { User } from 'src/users/entities/user.entity';
+import { Photo } from 'src/photos/entities/photo.entity';
 import {
   BaseEntity,
   Column,
@@ -8,10 +8,9 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
-export default class Album extends BaseEntity {
+export class Album extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -13,7 +13,7 @@ import {
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { CreateInvitationsDto } from './dto/create-invitations.dto';
 import { UpdateInvitationsDto } from './dto/update-invitations.dto';
-import InvitationsService from './invitations.service';
+import { InvitationsService } from './invitations.service';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -21,7 +21,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('api/Invitations')
-export default class InvitationsController {
+export class InvitationsController {
   constructor(private readonly invitationsService: InvitationsService) {}
   @ApiBody({ type: CreateInvitationsDto })
   @Post()

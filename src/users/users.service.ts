@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import User from './entities/user.entity';
-import Album from 'src/albums/entities/album.entity';
+import { User } from './entities/user.entity';
 
 @Injectable()
-export default class UsersService {
+export class UsersService {
   async create(
     createUserDto: CreateUserDto,
     hash: string,
