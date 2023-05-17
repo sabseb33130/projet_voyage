@@ -25,7 +25,6 @@ import { CreatePhotoDto } from './dto/create-photo.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
-import { Photo } from './entities/photo.entity';
 
 @Controller('api/photos')
 export class PhotosController {
