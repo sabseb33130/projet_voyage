@@ -55,17 +55,14 @@ export class PhotosController {
     const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
 
     if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
-
-    const view = await this.photosService.create(
-      userOne,
-      savedFiles,
-      createPhotoDto,
+    savedFiles.map((file) =>
+      this.photosService.create(userOne, file, createPhotoDto),
     );
 
     return {
       statusCode: 201,
       message: 'Votre photo ou vos photos ont été ajoutée',
-      data: view,
+      data: savedFiles,
     };
   }
   @Get(':imgpath')
@@ -129,6 +126,7 @@ export class PhotosController {
             return err;
           }
         }));
+        
     return {
       status: 200,
       message: `Votre photo a bien été supprimée`,
