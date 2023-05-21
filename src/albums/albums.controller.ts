@@ -46,6 +46,10 @@ export class AlbumsController {
 
     if (nomAlbumVerif && dateAlbumVerif)
       throw new ConflictException('Album déjà créé ');
+console.log('date',dateAlbumVerif);
+console.log('album',nomAlbumVerif);
+console.log(createAlbumDto.nom_album);
+
 
     const albumNew = await this.albumsService.create(createAlbumDto, user1);
 
@@ -111,14 +115,15 @@ export class AlbumsController {
     const oneAlbum = await Album.findOneBy({ id });
     const allAlbum = await Album.find();
     const allPhoto = await Photo.find();
-    console.log('un', oneAlbum);
-    console.log('tout', allAlbum);
-    console.log('photo', allPhoto);
+    
+console.log('one',oneAlbum);
 
     if (!oneAlbum) {
       throw new NotFoundException(`L'album n'existe pas ou est déjà supprimé`);
     }
-    const removedAlbum = await this.albumsService.delete(id);
+    const removedAlbum = await this.albumsService.delete(oneAlbum.id);
+   
+    
     return {
       status: 200,
       message: `L'album ${removedAlbum.nom_album} dont le numéro est ${id} a été supprimé`,

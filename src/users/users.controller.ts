@@ -52,7 +52,6 @@ export class UsersController {
       where: {
         nom: createUserDto.nom,
         prenom: createUserDto.prenom,
-        adresse_line1: createUserDto.adresse_line1,
       },
     });
     if (isNomExist) throw new ConflictException('Ce compte existe déjà');

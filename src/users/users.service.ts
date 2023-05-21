@@ -15,12 +15,8 @@ export class UsersService {
     newUser.pseudo = createUserDto.pseudo;
     newUser.email = createUserDto.email;
     newUser.password = hash;
-    newUser.adresse_line1 = createUserDto.adresse_line1;
-    newUser.adresse_line2 = createUserDto.adresse_line2;
-    newUser.ville = createUserDto.ville;
-    newUser.codepostal = createUserDto.codepostal;
-    newUser.departement = createUserDto.departement;
-    newUser.pays = createUserDto.pays;
+    newUser.photo_identite = createUserDto.photo_identite;
+  
     await newUser.save();
 
     return newUser;
@@ -98,19 +94,10 @@ export class UsersService {
       },
     });
 
-    if (updateUserDto.adresse_line1)
-      newUser.adresse_line1 = updateUserDto.adresse_line1;
-    if (updateUserDto.adresse_line2)
-      newUser.adresse_line2 = updateUserDto.adresse_line2;
-    if (updateUserDto.codepostal)
-      newUser.departement = updateUserDto.codepostal;
-    if (updateUserDto.departement)
-      newUser.departement = updateUserDto.departement;
+  
     if (updateUserDto.email) newUser.email = updateUserDto.email;
     if (updateUserDto.nom) newUser.nom = updateUserDto.nom;
-    if (updateUserDto.pays) newUser.pays = updateUserDto.pays;
-    if (updateUserDto.prenom) newUser.prenom = updateUserDto.prenom;
-    if (updateUserDto.ville) newUser.ville = updateUserDto.ville;
+   
     const upUser = newUser.save();
     return upUser;
   }

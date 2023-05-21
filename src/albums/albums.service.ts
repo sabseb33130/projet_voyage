@@ -14,9 +14,9 @@ export class AlbumsService {
   ): Promise<Album | undefined> {
     const newAlbum = new Album();
     newAlbum.nom_album = createAlbumDto.nom_album;
-    newAlbum.date_debut = createAlbumDto.date_debut;
-    newAlbum.date_fin = createAlbumDto.date_fin;
-    newAlbum.description = createAlbumDto.description;
+    if(createAlbumDto.date_debut) newAlbum.date_debut = createAlbumDto.date_debut;
+    if(createAlbumDto.date_fin)newAlbum.date_fin = createAlbumDto.date_fin;
+    if(createAlbumDto.description)newAlbum.description = createAlbumDto.description;
     newAlbum.user = [user];
     const albumNew = await Album.save(newAlbum);
 
@@ -76,7 +76,8 @@ export class AlbumsService {
   }
 
   async delete(id: number): Promise<Album | undefined> {
-    const suppId = await Album.findOneBy({ id });
+    const suppId = await Album.findOneBy({ id:id });
+      
     await Album.remove(suppId);
 
     return suppId;

@@ -25,10 +25,10 @@ export class Photo extends BaseEntity {
   @ApiProperty()
   @Column({ nullable: true })
   description: string;
-  @ManyToMany(() => Album, (album) => album.photos, { onDelete: 'CASCADE' })
+  @ManyToMany(() => Album, (album) => album.photos, { onDelete: 'CASCADE' ,onUpdate:'CASCADE'})
   albums: Album[];
 
   @ApiProperty()
-  @ManyToOne(() => User, (user) => user.photos, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.photos, { onDelete: 'CASCADE',onUpdate:'CASCADE' })
   user: User;
 }

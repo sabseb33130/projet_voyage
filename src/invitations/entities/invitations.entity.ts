@@ -12,7 +12,9 @@ export class Invitations extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column({ type: 'varchar' })
-  invitation: string;
+  user_email: string;
+  @Column({ type: 'varchar', nullable: true })
+  nom_invite: string;
 
   /*   @Column({ type: 'varchar', default: 'en attente' })
   invitation_ok: string;

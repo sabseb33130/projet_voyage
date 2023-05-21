@@ -46,30 +46,8 @@ export class User extends BaseEntity {
   password: string;
 
   @ApiProperty()
-  @Column({ type: 'varchar' })
-  adresse_line1: string;
-
-  @ApiProperty()
   @Column({ type: 'varchar', nullable: true })
-  adresse_line2: string;
-
-  @ApiProperty()
-  @Column({ type: 'varchar' })
-  ville: string;
-
-  @ApiProperty()
-  @Column({ type: 'varchar', nullable: true })
-  codepostal: string;
-
-  @ApiProperty()
-  @Column({ type: 'varchar' })
-  departement: string;
-  @ApiProperty()
-  @Column({ type: 'varchar' })
-  pays: string;
-  /*   @ApiProperty()
-  @Column({ type: 'varchar', nullable: true })
-  photo1: string; */
+  photo_identite: string;
   @OneToMany(() => Photo, (photo) => photo.user, {
     cascade: true,
     onDelete: 'CASCADE',

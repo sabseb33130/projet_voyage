@@ -29,8 +29,10 @@ export class InvitationsController {
     @Body() createInvitationsDto: CreateInvitationsDto,
     @GetUser() user,
   ) {
+    console.log(createInvitationsDto);
+
     const newInvitations = await this.invitationsService.findOneInvit(
-      createInvitationsDto.invitation,
+      createInvitationsDto.user_email,
     );
     if (newInvitations) {
       throw new NotFoundException('Invitation déjà envoyée.');

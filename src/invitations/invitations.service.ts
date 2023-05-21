@@ -10,7 +10,8 @@ export class InvitationsService {
     userId: number,
   ): Promise<Invitations | undefined> {
     const addInvitations = new Invitations();
-    addInvitations.invitation = createInvitationsDto.invitation;
+    addInvitations.user_email = createInvitationsDto.user_email;
+    addInvitations.nom_invite = createInvitationsDto.nom_invite;
     addInvitations.user = userId;
 
     const newInvitations = addInvitations.save();
@@ -27,8 +28,8 @@ export class InvitationsService {
     const oneInvitations = await Invitations.findOneBy({ id });
     return oneInvitations;
   }
-  async findOneInvit(invitation: string): Promise<Invitations | undefined> {
-    const oneInvitations = await Invitations.findOneBy({ invitation });
+  async findOneInvit(user_email: string): Promise<Invitations | undefined> {
+    const oneInvitations = await Invitations.findOneBy({ user_email });
     return oneInvitations;
   }
 

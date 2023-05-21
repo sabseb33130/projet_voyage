@@ -3,7 +3,6 @@ import {
   IsString,
   IsEmail,
   IsNotEmpty,
-  IsPostalCode,
   MinLength,
   IsOptional,
   Matches,
@@ -41,34 +40,7 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  adresse_line1: string;
-  @ApiProperty()
   @IsOptional()
   @IsString()
-  adresse_line2: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  ville: string;
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  pays: string;
-
-  @ApiProperty()
-  @IsPostalCode('FR')
-  @IsNotEmpty()
-  codepostal: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  departement: string;
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  photo1: string;
+  photo_identite: string;
 }

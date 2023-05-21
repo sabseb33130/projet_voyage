@@ -34,7 +34,10 @@ export class PhotosService {
   }
   async findAll(user: number): Promise<Photo[][] | undefined> {
     const albumUser = await User.findOneBy({ id: user });
+    console.log(albumUser);
+
     const allPhotos = albumUser.albums.map((elm) => elm.photos);
+    console.log(allPhotos);
 
     return allPhotos;
   }
@@ -64,7 +67,6 @@ export class PhotosService {
     const updatePhoto = await Photo.findOneBy({ id: id });
     const albumId = await Album.findOneBy({ id: updatePhotoDto.albumId });
     const verifAlbum = albumId.id !== +updatePhotoDto.albumId;
-
     updatePhoto.description = updatePhotoDto.description;
     if (verifAlbum) {
       updatePhoto?.albums.push(albumId);
