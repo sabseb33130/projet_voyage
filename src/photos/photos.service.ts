@@ -34,11 +34,8 @@ export class PhotosService {
   }
   async findAll(user: number): Promise<Photo[][] | undefined> {
     const albumUser = await User.findOneBy({ id: user });
-    console.log(albumUser);
 
     const allPhotos = albumUser.albums.map((elm) => elm.photos);
-    console.log(allPhotos);
-
     return allPhotos;
   }
 
