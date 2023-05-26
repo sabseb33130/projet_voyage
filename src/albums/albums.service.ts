@@ -3,7 +3,6 @@ import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 import { User } from 'src/users/entities/user.entity';
-
 import { Photo } from 'src/photos/entities/photo.entity';
 
 @Injectable()

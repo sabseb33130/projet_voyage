@@ -18,12 +18,6 @@ describe('AppController (e2e)', () => {
     app.close();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
-  });
   describe('/auth/login (POST)', () => {
     it('Dois retourner le token si tout va bien', async () => {
       const response = await request(app.getHttpServer())

@@ -9,11 +9,4 @@ export class CreateInvitationsDto {
   @IsString()
   @IsNotEmpty()
   nom_invite: string;
-
-  /*  @ApiProperty()
-  @IsString()
-  invitation_ok: string;
-  @ApiProperty()
-  @IsNumber()
-  Access_level: number; */
 }

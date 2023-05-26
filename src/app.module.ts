@@ -10,7 +10,6 @@ import { Album } from './albums/entities/album.entity';
 import { Photo } from './photos/entities/photo.entity';
 import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
-
 import { Invitations } from './invitations/entities/invitations.entity';
 import { InvitationsModule } from './invitations/invitations.module';
 import { PhotoIdentiteModule } from './photo-identite/photo-identite.module';

@@ -6,9 +6,15 @@ import {
   MinLength,
   IsOptional,
   Matches,
+  IsNumber,
 } from 'class-validator';
+import { PrimaryGeneratedColumn } from 'typeorm';
 
 export class CreateUserDto {
+  @ApiProperty()
+  @PrimaryGeneratedColumn()
+  @IsNumber()
+  id: number;
   @ApiProperty()
   @IsString()
   @IsNotEmpty()

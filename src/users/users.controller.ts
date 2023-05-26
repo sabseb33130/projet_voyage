@@ -105,12 +105,10 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Patch()
   async update(@Body() updateUserDto: UpdateUserDto, @GetUser() user) {
-    const userLogged = user.userId;
-
-    const userUpdate = await this.usersService.update(
-      userLogged,
-      updateUserDto,
-    );
+    let userUpdate;
+    if (user.userId === updateUserDto.id) {
+      userUpdate = await this.usersService.update(updateUserDto);
+    }
 
     return {
       statusCode: 201,
@@ -165,9 +163,9 @@ export class UsersController {
 
     return [updateUser, user];
   }
-  @Get('test')
-  async test() {
-    const test = await this.usersService.getAllfriends(1);
-    return test;
+  @Get('friend')
+  async friend() {
+    const friend = await this.usersService.getAllfriends(1);
+    return friend;
   }
 }

@@ -16,7 +16,7 @@ export class UsersService {
     newUser.email = createUserDto.email;
     newUser.password = hash;
     newUser.photo_identite = createUserDto.photo_identite;
-  
+
     await newUser.save();
 
     return newUser;
@@ -80,12 +80,9 @@ export class UsersService {
     return undefined;
   }
 
-  async update(
-    id: number,
-    updateUserDto: UpdateUserDto,
-  ): Promise<User | undefined> {
+  async update(updateUserDto: UpdateUserDto): Promise<User | undefined> {
     const newUser = await User.findOne({
-      where: { id: id },
+      where: { id: updateUserDto.id },
       relations: {
         photos: true,
         invitations: true,
@@ -94,11 +91,13 @@ export class UsersService {
       },
     });
 
-  
+    Object.assign(newUser, updateUserDto);
     if (updateUserDto.email) newUser.email = updateUserDto.email;
     if (updateUserDto.nom) newUser.nom = updateUserDto.nom;
-   
-    const upUser = newUser.save();
+
+    await User.save(newUser);
+    const upUser = await User.findOneBy({ id: updateUserDto.id });
+
     return upUser;
   }
 
@@ -132,9 +131,9 @@ export class UsersService {
       relations: { friends: true },
     });
 
-    const test = friend.toString().includes(idInvit.toString());
+    const invited = friend.toString().includes(idInvit.toString());
 
-    const status = test === true ? true : false;
+    const status = invited === true ? true : false;
 
     return status;
   }

@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePhotoDto } from './dto/create-photo.dto';
-import { UpdatePhotoDto } from './dto/update-photo.dto';
 import { Photo } from './entities/photo.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Album } from 'src/albums/entities/album.entity';
@@ -18,15 +16,16 @@ export class PhotosService {
   async create(
     user: User,
     file: Express.Multer.File,
-    createPhotoDto: CreatePhotoDto,
+    description: string,
+    albumId: number,
   ): Promise<Photo | undefined> {
-    const album = await Album.findOneBy({ id: +createPhotoDto.albumId });
+    const album = await Album.findOneBy({ id: albumId });
     const newPhoto = new Photo();
 
     newPhoto.user = user;
     newPhoto.file = file.filename;
     newPhoto.originalName = file.originalname;
-    newPhoto.description = createPhotoDto.description;
+    newPhoto.description = description;
     newPhoto.albums = [album];
     newPhoto.save();
 
@@ -59,14 +58,17 @@ export class PhotosService {
    */
   async update(
     id: number,
-    updatePhotoDto: UpdatePhotoDto,
+    description: string,
+    albumId: number,
   ): Promise<Photo | undefined> {
     const updatePhoto = await Photo.findOneBy({ id: id });
-    const albumId = await Album.findOneBy({ id: updatePhotoDto.albumId });
-    const verifAlbum = albumId.id !== +updatePhotoDto.albumId;
-    updatePhoto.description = updatePhotoDto.description;
+    const album = await Album.findOneBy({ id: albumId });
+    const verifAlbum = album.id !== +albumId;
+    if (updatePhoto.description !== description) {
+      updatePhoto.description = description;
+    }
     if (verifAlbum) {
-      updatePhoto?.albums.push(albumId);
+      updatePhoto?.albums.push(album);
     }
     const upPhoto = updatePhoto.save();
     return upPhoto;

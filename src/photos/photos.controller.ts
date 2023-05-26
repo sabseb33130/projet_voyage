@@ -53,10 +53,15 @@ export class PhotosController {
   ) {
     const userOne = await this.usersService.findOneById(user.userId);
     const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
-
+    createPhotoDto.descriptions.map((data) => data.description);
     if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
-    savedFiles.map((file) =>
-      this.photosService.create(userOne, file, createPhotoDto),
+    savedFiles.map((file, i) =>
+      this.photosService.create(
+        userOne,
+        file,
+        createPhotoDto.descriptions[i].description,
+        createPhotoDto.albumId,
+      ),
     );
 
     return {
@@ -93,7 +98,13 @@ export class PhotosController {
     if (!upPhoto) {
       throw new NotFoundException(`La photo n'existe pas `);
     }
-    const photoUp = await this.photosService.update(id, updatePhotoDto);
+
+    const photoUp = await this.photosService.update(
+      id,
+      updatePhotoDto.description,
+      updatePhotoDto.albumId,
+    );
+
     return {
       status: 200,
       message: 'Voici la photo enregistrée',
@@ -111,7 +122,6 @@ export class PhotosController {
       throw new NotFoundException("Cette photo n'existe pas ou plus");
     }
     const album = await this.albumsService.findAll();
-
     const photo = album
       .map((data) =>
         data.photos.find((elm) => elm.originalName === response.originalName),
@@ -126,7 +136,7 @@ export class PhotosController {
             return err;
           }
         }));
-        
+
     return {
       status: 200,
       message: `Votre photo a bien été supprimée`,

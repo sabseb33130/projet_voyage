@@ -1,5 +1,7 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { PartialType } from '@nestjs/swagger';
 import { CreatePhotoDto } from './create-photo.dto';
-import { IsNotEmpty, IsOptional } from 'class-validator';
 
-export class UpdatePhotoDto extends PartialType(CreatePhotoDto) {}
+export class UpdatePhotoDto extends PartialType(CreatePhotoDto) {
+  description: string;
+  albumId: number;
+}
