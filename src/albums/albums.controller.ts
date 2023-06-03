@@ -19,12 +19,16 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { UsersService } from 'src/users/users.service';
 
+import { PhotosService } from 'src/photos/photos.service';
+import { Photo } from 'src/photos/entities/photo.entity';
+import * as fs from 'fs';
 @UseGuards(JwtAuthGuard)
 @ApiTags('albums')
 @Controller('api/albums')
 @ApiBearerAuth()
 export class AlbumsController {
   constructor(
+    private readonly photosService: PhotosService,
     private readonly albumsService: AlbumsService,
     private readonly usersService: UsersService,
   ) {}
@@ -91,12 +95,27 @@ export class AlbumsController {
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     const oneAlbum = await this.albumsService.findOne(id);
-
     if (!oneAlbum) {
       throw new NotFoundException(`L'album n'existe pas ou est déjà supprimé`);
     }
-    const removedAlbum = await this.albumsService.delete(oneAlbum.id);
+    let photo: Photo[][];
+    for (const elm of oneAlbum.photos) {
+      const album = await this.albumsService.findAll();
+      photo = album.map((data) =>
+        data.photos.filter((data) => data.originalName === elm.originalName),
+      );
 
+      photo.length === 1
+        ? (await this.photosService.remove(elm.id),
+          fs.unlink(`./uploads/${elm.originalName}`, (err) => {
+            if (err) {
+              return err;
+            }
+          }))
+        : await this.photosService.remove(elm.id);
+    }
+
+    const removedAlbum = await this.albumsService.delete(oneAlbum.id);
     return {
       status: 200,
       message: `L'album ${removedAlbum.nom_album} dont le numéro est ${id} a été supprimé`,

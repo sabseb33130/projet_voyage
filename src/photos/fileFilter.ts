@@ -24,7 +24,9 @@ export const fileFilter = (req: any, file: any, callback: any) => {
  * @fonction middleware editFileName:
  * * Crée un nom de fichier personnalisé en utilisant le nom d'origine, extension de fichier et nombre aléatoire.
  */
+
 export const editFileName = (req: any, file: any, callback: any) => {
+  /*   if (CreatePhotoDto.name !== indefined) */
   const filename = file.originalname;
   callback(null, filename);
 };

@@ -19,7 +19,7 @@ import { UsersService } from 'src/users/users.service';
 import { AlbumsService } from 'src/albums/albums.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { editFileName, fileFilter } from './middleware/fileFilter';
+import { editFileName, fileFilter } from './fileFilter';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -55,6 +55,7 @@ export class PhotosController {
     const verifAlbum = await this.albumsService.findOne(createPhotoDto.albumId);
     createPhotoDto.descriptions.map((data) => data.description);
     if (!verifAlbum) throw new NotFoundException('L album nexiste pas');
+
     savedFiles.map((file, i) =>
       this.photosService.create(
         userOne,
