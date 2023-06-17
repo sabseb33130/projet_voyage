@@ -14,6 +14,7 @@ import { Invitations } from './invitations/entities/invitations.entity';
 import { InvitationsModule } from './invitations/invitations.module';
 import { PhotoIdentiteModule } from './photo-identite/photo-identite.module';
 import { PhotoIdentite } from './photo-identite/entities/photo-identite.entity';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { PhotoIdentite } from './photo-identite/entities/photo-identite.entity';
     AlbumsModule,
     AuthModule,
     PhotoIdentiteModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

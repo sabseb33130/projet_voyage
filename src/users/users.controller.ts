@@ -79,7 +79,7 @@ export class UsersController {
     if (!users) {
       throw new NotFoundException('Pas de compte enregistreé pour l instant');
     }
-    return users;
+    return { statusCode: 200, message: 'Voici tous les users.', data: users };
   }
   @ApiBearerAuth()
   @ApiResponse({ status: 200, description: `Le compte a été supprimé` })
@@ -143,10 +143,7 @@ export class UsersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('friend/:id')
-  async addFriend(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser() user,
-  ): Promise<[User, User]> {
+  async addFriend(@Param('id', ParseIntPipe) id: number, @GetUser() user) {
     const friend = await this.usersService.findOneById(id);
     if (!friend) throw new NotFoundException('Ce user n existe pas.');
 
@@ -161,7 +158,12 @@ export class UsersController {
       throw new ConflictException('Vous êtes déjà amis');
     const updateUser = await this.usersService.postfriend(user.userId, id);
 
-    return [updateUser, user];
+    return {
+      statusCode: 201,
+      message: `vous êtes maintenant amis avec ${updateUser.nom}`,
+      data: updateUser,
+      user,
+    };
   }
   @Get('friend')
   async friend() {
