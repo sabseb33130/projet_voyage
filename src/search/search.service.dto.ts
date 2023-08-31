@@ -8,8 +8,14 @@ export class SearchService {
     const result = await User.find({
       where: [{ pseudo: ILike(`%${search}%` || '') }],
     });
-    console.log('result', result);
 
     return result;
+  }
+  async searchb(search: string): Promise<User[]> {
+    const resulat = await User.find({
+      where: [{ nom: ILike(`%${search}%` || '') }],
+    });
+
+    return resulat;
   }
 }

@@ -24,11 +24,20 @@ export class Photo extends BaseEntity {
   file: string;
   @ApiProperty()
   @Column({ nullable: true })
+  mimetype: string;
+  @ApiProperty()
+  @Column({ nullable: true })
   description: string;
-  @ManyToMany(() => Album, (album) => album.photos, { onDelete: 'CASCADE' ,onUpdate:'CASCADE'})
+  @ManyToMany(() => Album, (album) => album.photos, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   albums: Album[];
 
   @ApiProperty()
-  @ManyToOne(() => User, (user) => user.photos, { onDelete: 'CASCADE',onUpdate:'CASCADE' })
+  @ManyToOne(() => User, (user) => user.photos, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   user: User;
 }

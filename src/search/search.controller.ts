@@ -2,6 +2,7 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  NotFoundException,
   Post,
   UseInterceptors,
 } from '@nestjs/common';
@@ -22,9 +23,11 @@ export class SearchController {
   @ApiBody({ type: SearchDto })
   @Post()
   async search(@Body() searchDto: SearchDto) {
-    console.log('input', searchDto.input);
+    if (searchDto.input === ' ') {
+      return [];
+    }
+
     const searchUser = await this.searchService.searcha(searchDto.input);
-    console.log('const', searchUser);
 
     return searchUser;
   }

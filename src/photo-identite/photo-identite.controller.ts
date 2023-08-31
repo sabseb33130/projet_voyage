@@ -19,7 +19,7 @@ import { UpdatePhotoIdentiteDto } from './dto/update-photo-identite.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { fileFilter } from 'src/photos/fileFilter';
+import { imageFileFilter } from 'src/photos/fileFilter';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { createReadStream } from 'fs';
 import { join } from 'path';
@@ -30,7 +30,7 @@ export class PhotoIdentiteController {
   constructor(private readonly photoIdentiteService: PhotoIdentiteService) {}
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('file', { fileFilter: fileFilter })) //Nom du fichier dans le champs du formulaire HTML et nombre maximum de photos
+  @UseInterceptors(FileInterceptor('file', { fileFilter: imageFileFilter })) //Nom du fichier dans le champs du formulaire HTML et nombre maximum de photos
   @Post('uploads')
   async create(
     @UploadedFile() file: Express.Multer.File,

@@ -1,32 +1,36 @@
 import { extname } from 'path';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import * as mime from 'mime-types';
 
-/**
- * @fonction middleware imagefileFilter:
- * * Vérifie si le type de fichier est une image.
- * * True : image téléchargée.
- */
-export const fileFilter = (req: any, file: any, callback: any) => {
-  callback(null, true);
-  if (file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    callback(null, true);
-  } else {
-    callback(
+export const imageFileFilter = async (req: any, file: any, callback: any) => {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
+    return callback(
       new HttpException(
-        `type de fichier non supporté ${extname(file.originalname)}`,
+        `Type de fichier non supporté ${extname(file.originalname)}`,
         HttpStatus.BAD_REQUEST,
       ),
       false,
     );
   }
+  console.log(file.path);
+
+  const mimeType = mime.lookup(file.originalname);
+
+  if (!mimeType || !mimeType.startsWith('image/')) {
+    return callback(
+      new HttpException(
+        'Fichier non reconnu comme une image',
+        HttpStatus.BAD_REQUEST,
+      ),
+      false,
+    );
+  }
+
+  callback(null, true);
 };
-/**
- * @fonction middleware editFileName:
- * * Crée un nom de fichier personnalisé en utilisant le nom d'origine, extension de fichier et nombre aléatoire.
- */
 
 export const editFileName = (req: any, file: any, callback: any) => {
-  /*   if (CreatePhotoDto.name !== indefined) */
-  const filename = file.originalname;
+  let filename = file.originalname;
+
   callback(null, filename);
 };

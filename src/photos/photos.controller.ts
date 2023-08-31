@@ -19,7 +19,7 @@ import { UsersService } from 'src/users/users.service';
 import { AlbumsService } from 'src/albums/albums.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { editFileName, fileFilter } from './fileFilter';
+import { editFileName, imageFileFilter } from './fileFilter';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -43,7 +43,7 @@ export class PhotosController {
         destination: './uploads',
         filename: editFileName,
       }),
-      fileFilter: fileFilter,
+      fileFilter: imageFileFilter,
     }),
   )
   async addNewImage(

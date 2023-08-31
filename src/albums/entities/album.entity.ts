@@ -16,7 +16,7 @@ export class Album extends BaseEntity {
 
   @Column({ type: 'varchar', length: 50 })
   nom_album: string;
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   date_debut: string;
   @Column({ type: 'varchar', nullable: true })
   date_fin: string;

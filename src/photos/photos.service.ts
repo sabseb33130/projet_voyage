@@ -25,9 +25,11 @@ export class PhotosService {
     newPhoto.user = user;
     newPhoto.file = file.filename;
     newPhoto.originalName = file.originalname;
+    newPhoto.mimetype = file.mimetype;
     newPhoto.description = description;
     newPhoto.albums = [album];
     newPhoto.save();
+    console.log(newPhoto.file);
 
     return newPhoto;
   }
