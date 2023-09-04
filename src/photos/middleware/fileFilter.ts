@@ -1,9 +1,10 @@
 import { extname } from 'path';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import * as mime from 'mime-types';
+import VerifFormatFichier from './verifFormatFichier';
 
 export const imageFileFilter = async (req: any, file: any, callback: any) => {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp|xlsx)$/)) {
     return callback(
       new HttpException(
         `Type de fichier non supporté ${extname(file.originalname)}`,
@@ -12,7 +13,7 @@ export const imageFileFilter = async (req: any, file: any, callback: any) => {
       false,
     );
   }
-  console.log(file.path);
+  console.log(file);
 
   const mimeType = mime.lookup(file.originalname);
 

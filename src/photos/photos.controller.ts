@@ -19,7 +19,7 @@ import { UsersService } from 'src/users/users.service';
 import { AlbumsService } from 'src/albums/albums.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { editFileName, imageFileFilter } from './fileFilter';
+import { editFileName, imageFileFilter } from './middleware/fileFilter';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -65,11 +65,26 @@ export class PhotosController {
       ),
     );
 
-    return {
-      statusCode: 201,
-      message: 'Votre photo ou vos photos ont été ajoutée',
-      data: savedFiles,
-    };
+    console.log(
+      fs.existsSync(
+        `uploads/${savedFiles.map((data, i) => data.originalname)}`,
+      ),
+    );
+
+    if (
+      fs.existsSync(`uploads/${savedFiles.map((data, i) => data.originalname)}`)
+    ) {
+      return {
+        statusCode: 201,
+        message: 'Votre photo ou vos photos ont été ajoutée',
+        data: savedFiles,
+      };
+    } else {
+      return {
+        statusCode: 404,
+        message: 'Votre photo ou vos photos n ont pas le format voulues',
+      };
+    }
   }
   @Get(':imgpath')
   async seeUploadedFile(@Param('imgpath') file, @Res() res) {
@@ -123,13 +138,15 @@ export class PhotosController {
       throw new NotFoundException("Cette photo n'existe pas ou plus");
     }
     const album = await this.albumsService.findAll();
+
     const photo = album
       .map((data) =>
         data.photos.find((elm) => elm.originalName === response.originalName),
       )
       .filter((data) => data).length;
+    console.log(fs.existsSync(`./uploads/${response.file}`));
 
-    photo > 1
+    photo > 1 || fs.existsSync(`./uploads/${response.file}`) === false
       ? await this.photosService.remove(id)
       : (await this.photosService.remove(id),
         fs.unlink(`./uploads/${response.file}`, (err) => {

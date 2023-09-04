@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Photo } from './entities/photo.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Album } from 'src/albums/entities/album.entity';
-
+import VerifFormatFichier from './middleware/verifFormatFichier';
+import * as fs from 'fs';
 @Injectable()
 export class PhotosService {
   /**
@@ -13,6 +14,7 @@ export class PhotosService {
    * @returns Photo[]
    * files est le dossier qui peut contenir une a 8 photos donxc je le map avant de le save dans la table photo
    */
+
   async create(
     user: User,
     file: Express.Multer.File,
@@ -29,7 +31,10 @@ export class PhotosService {
     newPhoto.description = description;
     newPhoto.albums = [album];
     newPhoto.save();
-    console.log(newPhoto.file);
+
+    VerifFormatFichier(file, this);
+    console.log(fs.existsSync(`./uploads/${newPhoto.originalname}`));
+    console.log(newPhoto.id);
 
     return newPhoto;
   }
@@ -78,6 +83,15 @@ export class PhotosService {
 
   async remove(id: number): Promise<Photo | undefined> {
     const deletedImage = await Photo.findOneBy({ id });
+
+    deletedImage.remove();
+    if (deletedImage) {
+      return deletedImage;
+    }
+    return undefined;
+  }
+  async delete(photo: string): Promise<Photo | undefined> {
+    const deletedImage = await Photo.findOneBy({ originalName: photo });
 
     deletedImage.remove();
     if (deletedImage) {

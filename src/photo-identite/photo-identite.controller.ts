@@ -19,7 +19,7 @@ import { UpdatePhotoIdentiteDto } from './dto/update-photo-identite.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { imageFileFilter } from 'src/photos/fileFilter';
+import { imageFileFilter } from 'src/photos/middleware/fileFilter';
 import { GetUser } from 'src/auth/get_user.decorator';
 import { createReadStream } from 'fs';
 import { join } from 'path';

@@ -13,6 +13,7 @@ export class InvitationsService {
     addInvitations.user_email = createInvitationsDto.user_email;
     addInvitations.nom_invite = createInvitationsDto.nom_invite;
     addInvitations.user = userId;
+    addInvitations.id_invitation = createInvitationsDto.id_invitation;
 
     const newInvitations = addInvitations.save();
 

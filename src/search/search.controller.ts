@@ -28,7 +28,12 @@ export class SearchController {
     }
 
     const searchUser = await this.searchService.searcha(searchDto.input);
+    const searchAlbum = await this.searchService.searchb(searchDto.input);
+    console.log(searchUser);
+    console.log(searchAlbum);
+    const test = [searchAlbum, searchUser];
+    console.log(test);
 
-    return searchUser;
+    return test;
   }
 }

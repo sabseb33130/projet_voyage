@@ -12,6 +12,7 @@ import {
 
 @Entity()
 export class Photo extends BaseEntity {
+  [x: string]: any;
   @PrimaryGeneratedColumn()
   id: number;
 

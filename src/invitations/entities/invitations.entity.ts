@@ -15,6 +15,8 @@ export class Invitations extends BaseEntity {
   user_email: string;
   @Column({ type: 'varchar', nullable: true })
   nom_invite: string;
+  @Column({ type: 'varchar', nullable: true })
+  id_invitation: string;
 
   @ManyToOne(() => User, (user) => user.invitations, {
     cascade: true,
