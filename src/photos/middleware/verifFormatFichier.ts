@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-// Importez votre enum FileType (assurez-vous que le chemin est correct)
+// Import enum FileType
 import FileType from './fileFormat';
 import { PhotosService } from '../photos.service';
 
@@ -10,12 +10,12 @@ export default function VerifFormatFichier(
 
   photosService: PhotosService,
 ) {
-  // Assurez-vous que vous avez le chemin complet du fichier
+  // vérifis le chemin complet du fichier
   const filePath = `uploads/${file.originalname}`;
-  console.log(file.originalname);
+  console.log(file);
   const verif = file.originalname.split('.')[1];
 
-  // Lisez le contenu du fichier
+  // Lecture du contenu du fichier
   fs.readFile(filePath, async (err, data) => {
     if (err) {
       console.error('Erreur lors de la lecture du fichier :', err);
@@ -25,14 +25,11 @@ export default function VerifFormatFichier(
     // Convertissez les octets en hexadécimal
     const imgHex = data.toString('hex');
 
-    // Vérifiez si imgHex correspond à l'une des signatures de formats de fichiers
+    // Vérifiez si imgHex correspond à l'un des formats
     let fileType = null;
 
     for (const type in FileType) {
       if (imgHex.indexOf(FileType[type]) === 0) {
-        // console.log('verif', FileType[type]);
-        //  console.log(type);
-
         fileType = type;
         break;
       }
@@ -42,7 +39,6 @@ export default function VerifFormatFichier(
 
     if (fileType === verif) {
       console.log(`Le fichier est de type ${fileType}`);
-      // Faites ce que vous devez faire avec le type de fichier
     } else {
       console.log("Le type de fichier n'a pas pu être déterminé.");
       fs.unlink(`./uploads/${file.originalname}`, (err) => {
